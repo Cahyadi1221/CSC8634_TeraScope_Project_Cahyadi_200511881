@@ -17,4 +17,5 @@ applicationCheckpointDuplicates
 
 # Check for the total Render data, the correlation using pairs function
 
-graphicalSumamries1 = pairs(masterData[,c(6,9:12)])
+graphicalSummaries1 = pairs(masterData[,c(6,9:12)])
+cache('graphicalSummaries1')
