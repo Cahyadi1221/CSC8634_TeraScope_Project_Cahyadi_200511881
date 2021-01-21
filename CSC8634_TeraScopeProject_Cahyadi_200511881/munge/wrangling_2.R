@@ -444,4 +444,10 @@ for (hostf in hostnameListF){
   # End of the Hostname Loop
 }
 
+# Save the wrangled data into the cache so that user that are looking to reproduce
+# the analysis doesn't have to wait for the wrangling process to finish running
 cache('finalData_2')
+
+# Merge the wrangled data with the task.x.y data
+masterData = merge(finalData_2, task.x.y, by = c("taskId", "jobId"))
+cache('masterData')
