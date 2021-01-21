@@ -34,6 +34,9 @@ cor(verticalData_Raw[,c(7,10:12)])
 # Total Render
 totalRenderData = subset(verticalData_Raw, eventName == "TotalRender")
 cor(totalRenderData[,c(7,10:13)])
+# Extracting the ColMeans for the data set
+numericalAvgTotalRender = colMeans(totalRenderData[,c(7,10:13)])
+numericalAvgTotalRender
 
 # Saving Config
 savingConfigData = subset(verticalData_Raw, eventName == "Saving Config")
@@ -41,20 +44,52 @@ cor(savingConfigData[,c(7,10:13)])
 # The correlation between the duration and the Power Draw is really low, quite
 # possibly caused by the interpolation made to record the GPU condition of this
 # particular event name
+# Extracting the ColMeans for the data set
+numericalAvgSavingConfig = colMeans(savingConfigData[,c(7,10:13)])
+numericalAvgSavingConfig
 
 # Render 
 renderData = subset(verticalData_Raw, eventName == "Render")
 cor(renderData[,c(7,10:13)])
+# The correlation matrix here provide a similar result to that of the total Render
+# event name. This is probably due to the characteristic of the render event name
+# in which it dominates the duration of the task itself
 
+# Extracting the ColMeans for the data set
+numericalAvgRender = colMeans(renderData[,c(7,10:13)])
+numericalAvgRender
+# The Render event has an average 
+# Duration          = 41.20822 seconds
+# Power Draw        = 95.78656 Watt
+# GPU Temp          = 40.54942 Celcius
+# GPU Util Perc     = 71.44715 %
+# GPU Mem Util Perc = 37.43622 %
 
 # Tiling
 tilingData  = subset(verticalData_Raw, eventName == "Tiling")
 cor(tilingData[,c(7,10:13)])
+# Again, having the similar correlation matrix result with the Saving Config 
+# event name, quite possibly because we are using the interpolation of gpu condition
+# of the 2 closest timestamp
+
+# Extracting the colMeans for the data set
+numericalAvgTiling = colMeans(tilingData[,c(7,10:13)])
+numericalAvgTiling
+# The Tiling event has an average 
+# Duration          = 0.9732072 seconds
+# Power Draw        = 50.4252683 Watt
+# GPU Temp          = 39.5941514 Celcius
+# GPU Util Perc     = 12.8614442 %
+# GPU Mem Util Perc = 6.0049473 %
+
 
 # Uploading
 uploadingData = subset(verticalData_Raw, eventName == "Uploading")
 cor(uploadingData[,c(7,10:13)])
 
+# Extracting the colMeans for the data set
+numericalAvgUploading = colMeans(uploadingData[,c(7,10:13)])
+numericalAvgUploading
 
 
 
