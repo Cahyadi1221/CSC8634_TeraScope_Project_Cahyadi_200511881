@@ -5,16 +5,14 @@ library(ggplot2)
 load.project()
 
 # Create a vertical data in event name is considered a column
-appCheckpointRawDistinct = unique(Copy.of.application.checkpoints)
 
-gpuRawDistinct = unique(Copy.of.gpu)
-
-
-
-appDataframe = appCheckpointRawDistinct
-GPUdataframe = gpuRawDistinct
-
+# To Avoid any duplicates within the data, run the unique function on each data
+# Save the data into another variable
+appDataframe = unique(Copy.of.application.checkpoints)
+GPUdataframe = unique(Copy.of.gpu)
+# Extract the hostname list
 hostnameListF = unique(appDataframe$hostname)
+# Set up an empty data frame
 finalData_3 = data.frame()
 
 for (hostf in hostnameListF){
