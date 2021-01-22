@@ -443,3 +443,7 @@ for (hostf in hostnameListF){
 
 verticalData_Raw = finalData_3
 cache('verticalData_Raw')
+
+# Merge the newly made data set with the task x y data
+verticalData_merged_Raw = merge(verticalData_Raw, task.x.y, by = c("taskId", "jobId"))
+cache('verticalData_merged_Raw')
