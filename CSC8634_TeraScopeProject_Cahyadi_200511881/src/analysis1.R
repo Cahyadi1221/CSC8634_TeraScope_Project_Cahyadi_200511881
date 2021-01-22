@@ -17,14 +17,14 @@ applicationCheckpointDuplicates
 
 # Check for the total Render data, the correlation using pairs function
 
-graphicalSummaries1 = pairs(masterData[,c(6,9:12)])
+graphicalSummaries1 = pairs(masterData[,c(6,9:12)], main = "Total Render Plots")
 cache('graphicalSummaries1')
 
 # Numerical Summaries of the horizontal data
 cor(masterData[,c(6,9:12,15:19,22:26,29:33,36:43)])
 
 # Graphical summaries on the vertical data
-pairs(verticalData_Raw[,c(7,10:12)])
+pairs(verticalData_Raw[,c(7,10:12)], main = "All Event Name Pairs Plot")
 
 # Get the correlation matrix from the numerical columns
 cor(verticalData_Raw[,c(7,10:12)])
@@ -47,6 +47,13 @@ cor(savingConfigData[,c(7,10:13)])
 # Extracting the ColMeans for the data set
 numericalAvgSavingConfig = colMeans(savingConfigData[,c(7,10:13)])
 numericalAvgSavingConfig
+# The saving Config Event has an average
+# Duration          = 0.002476266 seconds
+# Power Draw        = 41.166747222 Watt
+# GPU Temp          = 38.330681075 Celcius
+# GPU Util Perc     = 5.024721475 %
+# GPU Mem Util Perc = 2.425903972 %
+
 
 # Render 
 renderData = subset(verticalData_Raw, eventName == "Render")
@@ -90,6 +97,14 @@ cor(uploadingData[,c(7,10:13)])
 # Extracting the colMeans for the data set
 numericalAvgUploading = colMeans(uploadingData[,c(7,10:13)])
 numericalAvgUploading
+
+# The Tiling event has an average 
+# Duration          = 1.393641 seconds
+# Power Draw        = 49.845835 Watt
+# GPU Temp          = 39.533123 Celcius
+# GPU Util Perc     = 12.323613 %
+# GPU Mem Util Perc = 5.750262 %
+
 
 
 
