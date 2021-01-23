@@ -3,6 +3,7 @@ library(dplyr)
 library(ProjectTemplate)
 library(lubridate)
 library(ggplot2)
+library(GGally)
 load.project()
 
 # Check the duplicates on the original data
@@ -15,15 +16,12 @@ applicationCheckpointDuplicates
 # Therefore in the wrangling process, the usage of unique(data) to avoid processing 
 # duplicates is validated. 
 
-# Check for the total Render data, the correlation using pairs function
-
-pairs(masterData[,c(6,9:12)], main = "Total Render Plots")
 
 # Numerical Summaries of the horizontal data
 cor(masterData[,c(6,9:12,15:19,22:26,29:33,36:43)])
 
 # Graphical summaries on the vertical data
-pairs(verticalData_Raw[,c(7,10:12)], main = "All Event Name Pairs Plot")
+ggpairs(verticalData_Raw[,c(7,10:12)], aes(alpha=0.4))
 
 # Get the correlation matrix from the numerical columns
 cor(verticalData_Raw[,c(7,10:12)])
@@ -32,7 +30,9 @@ cor(verticalData_Raw[,c(7,10:12)])
 
 # Total Render
 totalRenderData = subset(verticalData_merged_Raw, eventName == "TotalRender")
-cor(totalRenderData[,c(7,10:13)])
+
+# Numerical Summaries
+cor(totalRenderData[,c(7,10:13,16)])
 # Extracting the ColMeans for the data set
 numericalAvgTotalRender = colMeans(totalRenderData[,c(7,10:13)])
 numericalAvgTotalRender
@@ -56,7 +56,7 @@ numericalAvgSavingConfig
 
 # Render 
 renderData = subset(verticalData_merged_Raw, eventName == "Render")
-cor(renderData[,c(7,10:13)])
+cor(renderData[,c(7,10:13,16)])
 # The correlation matrix here provide a similar result to that of the total Render
 # event name. This is probably due to the characteristic of the render event name
 # in which it dominates the duration of the task itself
@@ -104,7 +104,44 @@ numericalAvgUploading
 # GPU Util Perc     = 12.323613 %
 # GPU Mem Util Perc = 5.750262 %
 
+# Check whether event name has high correlation with the GPU condition
 
+# Subset the data that have event name apart from total render
+eventNamesData = subset(verticalData_merged_Raw, eventName != "TotalRender")
+
+# Extract the unique GPU id
+GPUidList = unique(eventNamesData$gpuUUID)
+length(GPUidList)
+# There are 1024 GPU id, which is equal to the number of hostname. Therefore, 
+# each hostname has its own GPU unit
+
+# Extract the GPU serial
+GPUSerialList = unique(eventNamesData$gpuSerial)
+length(GPUSerialList)
+# There are only 12 GPU serial. We might want to change this into a feature
+
+test =factor(unique(eventNamesData$eventName))
+test
+test = ordered(test, c("Saving Config", "Render", "Tiling", "Uploading"))
+as.numeric(test)
+
+# Make the event name as a feature by converting it into a factor then a numeric factor
+eventNamesData[,"eventNameFeature"] = as.factor(eventNamesData[,"eventName"])
+eventNamesData[,"eventNameFeature"] = ordered(eventNamesData[,"eventName"], c("Saving Config", "Render", "Tiling", "Uploading"))
+eventNamesData[,"eventNameFeature"] = as.numeric(eventNamesData[,"eventNameFeature"])
+
+# Make the gpu serial as factor and a feature
+eventNamesData[,"gpuSerialFeature"] = as.factor(eventNamesData[,"gpuSerial"])
+eventNamesData[,"gpuSerialFeature"] = as.numeric(eventNamesData[,"gpuSerialFeature"])
+
+# Create a correlation matrix 
+cor(eventNamesData[,c(7,10:13,16:18)])
+
+# Plot the data with the new features we just created
+ggpairs(eventNamesData[,c(7,10:13,16:18)], aes(alpha = 0.4))
+
+# Assessing individual event name
+# Since Render is the event that dominate a rendering task, we focus on render
 
 
 
