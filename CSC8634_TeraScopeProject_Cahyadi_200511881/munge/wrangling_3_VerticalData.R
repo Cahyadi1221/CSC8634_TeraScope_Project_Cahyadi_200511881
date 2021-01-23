@@ -1,9 +1,3 @@
-library(ProjectTemplate)
-library(dplyr)
-library(lubridate)
-library(ggplot2)
-load.project()
-
 # Create a vertical data in event name is considered a column
 
 # To Avoid any duplicates within the data, run the unique function on each data
@@ -447,3 +441,25 @@ cache('verticalData_Raw')
 # Merge the newly made data set with the task x y data
 verticalData_merged_Raw = merge(verticalData_Raw, task.x.y, by = c("taskId", "jobId"))
 cache('verticalData_merged_Raw')
+
+# Subsetting the data into different event name within the task
+
+# First the Total Render event name which constitute the whole task itself
+totalRenderData = subset(verticalData_merged_Raw, eventName == "TotalRender")
+cache('totalRenderData')
+
+# Subset of the first event on the task which is the  Saving Config event
+savingConfigData = subset(verticalData_merged_Raw, eventName == "Saving Config")
+cache('savingConfigData')
+
+# Subset of the second event on task which is the Render event
+renderData = subset(verticalData_merged_Raw, eventName == "Render")
+cache('renderData')
+
+# Subset of the third event on task which is the Tiling event
+tilingData  = subset(verticalData_merged_Raw, eventName == "Tiling")
+cache('tilingData')
+
+# Subset of the fourth and last event on task which is the Uploading even
+uploadingData = subset(verticalData_merged_Raw, eventName == "Uploading")
+cache('uploadingData')
