@@ -4,6 +4,7 @@ library(ProjectTemplate)
 library(lubridate)
 library(ggplot2)
 library(GGally)
+library(knitr)
 load.project()
 
 # Check the duplicates on the original data
@@ -20,16 +21,18 @@ applicationCheckpointDuplicates
 # Numerical Summaries of the horizontal data
 cor(masterData[,c(6,9:12,15:19,22:26,29:33,36:43)])
 
-# Graphical summaries on the vertical data
-ggpairs(verticalData_Raw[,c(7,10:12)], aes(alpha=0.4))
+
+# Pairs function on the vertical data
+
+ggpairs(verticalData_Raw[,c(7,10:12)])
 
 # Get the correlation matrix from the numerical columns
 cor(verticalData_Raw[,c(7,10:12)])
 
+
 # Subsetting the data via event Name and check the Correlation Matrix for each
 
 # Total Render
-totalRenderData = subset(verticalData_merged_Raw, eventName == "TotalRender")
 
 # Numerical Summaries
 cor(totalRenderData[,c(7,10:13,16)])
@@ -38,7 +41,6 @@ numericalAvgTotalRender = colMeans(totalRenderData[,c(7,10:13)])
 numericalAvgTotalRender
 
 # Saving Config
-savingConfigData = subset(verticalData_merged_Raw, eventName == "Saving Config")
 cor(savingConfigData[,c(7,10:13)])
 # The correlation between the duration and the Power Draw is really low, quite
 # possibly caused by the interpolation made to record the GPU condition of this
@@ -55,7 +57,6 @@ numericalAvgSavingConfig
 
 
 # Render 
-renderData = subset(verticalData_merged_Raw, eventName == "Render")
 cor(renderData[,c(7,10:13,16)])
 # The correlation matrix here provide a similar result to that of the total Render
 # event name. This is probably due to the characteristic of the render event name
@@ -72,7 +73,6 @@ numericalAvgRender
 # GPU Mem Util Perc = 37.43622 %
 
 # Tiling
-tilingData  = subset(verticalData_merged_Raw, eventName == "Tiling")
 cor(tilingData[,c(7,10:13)])
 # Again, having the similar correlation matrix result with the Saving Config 
 # event name, quite possibly because we are using the interpolation of gpu condition
@@ -90,7 +90,6 @@ numericalAvgTiling
 
 
 # Uploading
-uploadingData = subset(verticalData_merged_Raw, eventName == "Uploading")
 cor(uploadingData[,c(7,10:13)])
 
 # Extracting the colMeans for the data set
@@ -104,45 +103,17 @@ numericalAvgUploading
 # GPU Util Perc     = 12.323613 %
 # GPU Mem Util Perc = 5.750262 %
 
-# Check whether event name has high correlation with the GPU condition
-
-# Subset the data that have event name apart from total render
-eventNamesData = subset(verticalData_merged_Raw, eventName != "TotalRender")
-
-# Extract the unique GPU id
-GPUidList = unique(eventNamesData$gpuUUID)
-length(GPUidList)
-# There are 1024 GPU id, which is equal to the number of hostname. Therefore, 
-# each hostname has its own GPU unit
-
-# Extract the GPU serial
-GPUSerialList = unique(eventNamesData$gpuSerial)
-length(GPUSerialList)
-# There are only 12 GPU serial. We might want to change this into a feature
-
-test =factor(unique(eventNamesData$eventName))
-test
-test = ordered(test, c("Saving Config", "Render", "Tiling", "Uploading"))
-as.numeric(test)
-
-# Make the event name as a feature by converting it into a factor then a numeric factor
-eventNamesData[,"eventNameFeature"] = as.factor(eventNamesData[,"eventName"])
-eventNamesData[,"eventNameFeature"] = ordered(eventNamesData[,"eventName"], c("Saving Config", "Render", "Tiling", "Uploading"))
-eventNamesData[,"eventNameFeature"] = as.numeric(eventNamesData[,"eventNameFeature"])
-
-# Make the gpu serial as factor and a feature
-eventNamesData[,"gpuSerialFeature"] = as.factor(eventNamesData[,"gpuSerial"])
-eventNamesData[,"gpuSerialFeature"] = as.numeric(eventNamesData[,"gpuSerialFeature"])
+# Assessing individual event name
+# Since Render is the event that dominate a rendering task, we focus on render
 
 # Create a correlation matrix 
 cor(eventNamesData[,c(7,10:13,16:18)])
 
-# Plot the data with the new features we just created
-ggpairs(eventNamesData[,c(7,10:13,16:18)], aes(alpha = 0.4))
+# Extract the variance of the data
+diag(var(eventNamesData[,c(7,10:13,16:18)]))
 
-# Assessing individual event name
-# Since Render is the event that dominate a rendering task, we focus on render
+# It seems that the data is highly variated and it is reflected by their variance
+summary(eventNamesData[,c(7,10:13,16:18)])
 
-
-
-
+g = ggpairs(eventNamesData[,c(7,10:13,16:18)], mapping = aes(alpha = 0.3), title = "All Event Names")
+g

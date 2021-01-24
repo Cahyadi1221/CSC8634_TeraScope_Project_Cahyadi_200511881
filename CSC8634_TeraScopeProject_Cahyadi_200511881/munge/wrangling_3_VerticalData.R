@@ -442,24 +442,56 @@ cache('verticalData_Raw')
 verticalData_merged_Raw = merge(verticalData_Raw, task.x.y, by = c("taskId", "jobId"))
 cache('verticalData_merged_Raw')
 
-# Subsetting the data into different event name within the task
-
-# First the Total Render event name which constitute the whole task itself
-totalRenderData = subset(verticalData_merged_Raw, eventName == "TotalRender")
+# Separate the Total Render which constitute the whole task length into an individual data set
+totalRenderData = subset(eventNamesData, eventName == "TotalRender")
 cache('totalRenderData')
 
+# Create a version of the vertical data in which does not include the Total Render
+# event name since it basically cover the entire task length. Also, create a new 
+# features which are the gpuSerialFeature(turning the gpuSerial as a numerical factor )
+# and the eventNameFeature(turning the event name as a numerical factor)
+
+# Subset the data that have event name apart from total render
+eventNamesData = subset(verticalData_merged_Raw, eventName != "TotalRender")
+
+# Extract the unique GPU id
+GPUidList = unique(eventNamesData$gpuUUID)
+length(GPUidList)
+# There are 1024 GPU id, which is equal to the number of hostname. Therefore, 
+# each hostname has its own GPU unit
+
+# Extract the GPU serial
+GPUSerialList = unique(eventNamesData$gpuSerial)
+length(GPUSerialList)
+# There are only 12 GPU serial. We might want to change this into a feature
+
+
+# Make the event name as a feature by converting it into a factor then a numeric factor
+eventNamesData[,"eventNameFeature"] = as.factor(eventNamesData[,"eventName"])
+eventNamesData[,"eventNameFeature"] = ordered(eventNamesData[,"eventName"], c("Saving Config", "Render", "Tiling", "Uploading"))
+eventNamesData[,"eventNameFeature"] = as.numeric(eventNamesData[,"eventNameFeature"])
+
+# Make the gpu serial as factor and a feature
+eventNamesData[,"gpuSerialFeature"] = as.factor(eventNamesData[,"gpuSerial"])
+eventNamesData[,"gpuSerialFeature"] = as.numeric(eventNamesData[,"gpuSerialFeature"])
+
+cache('eventNamesData')
+
+
+# Subsetting the data into different event name within the task
+
 # Subset of the first event on the task which is the  Saving Config event
-savingConfigData = subset(verticalData_merged_Raw, eventName == "Saving Config")
+savingConfigData = subset(eventNamesData, eventName == "Saving Config")
 cache('savingConfigData')
 
 # Subset of the second event on task which is the Render event
-renderData = subset(verticalData_merged_Raw, eventName == "Render")
+renderData = subset(eventNamesData, eventName == "Render")
 cache('renderData')
 
 # Subset of the third event on task which is the Tiling event
-tilingData  = subset(verticalData_merged_Raw, eventName == "Tiling")
+tilingData  = subset(eventNamesData, eventName == "Tiling")
 cache('tilingData')
 
 # Subset of the fourth and last event on task which is the Uploading even
-uploadingData = subset(verticalData_merged_Raw, eventName == "Uploading")
+uploadingData = subset(eventNamesData, eventName == "Uploading")
 cache('uploadingData')
