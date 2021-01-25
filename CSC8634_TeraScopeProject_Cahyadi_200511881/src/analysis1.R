@@ -24,10 +24,10 @@ cor(masterData[,c(6,9:12,15:19,22:26,29:33,36:43)])
 
 # Pairs function on the vertical data
 
-ggpairs(verticalData_Raw[,c(7,10:12)])
+ggpairs(eventNamesData, columns = c("duration","AvgPowerDrawWatt", "AvgGPUTempC", "AvgGPUUtilPerc", "AvgGPUMemUtilPerc" ), mapping = ggplot2::aes(colour = eventName))
 
 # Get the correlation matrix from the numerical columns
-cor(verticalData_Raw[,c(7,10:12)])
+cor(eventNamesData[,c(7,10:12)])
 
 
 # Subsetting the data via event Name and check the Correlation Matrix for each
@@ -115,5 +115,6 @@ diag(var(eventNamesData[,c(7,10:13,16:18)]))
 # It seems that the data is highly variated and it is reflected by their variance
 summary(eventNamesData[,c(7,10:13,16:18)])
 
-g = ggpairs(eventNamesData[,c(7,10:13,16:18)], mapping = aes(alpha = 0.3), title = "All Event Names")
-g
+
+# Test GGpairs with boxplot
+ggplot(eventNamesData, aes(x = duration, y = AvgGPUUtilPerc, group = eventName, fill = eventName)) + geom_boxplot()
