@@ -11,10 +11,7 @@ knitr::opts_knit$set(root.dir= normalizePath('..'))
 knitr::opts_chunk$set(fig.align = "center")
 ```
 
-# CSC8634 Project: Performance Evaluation of TeraPixel Rendering in Cloud (Super) Computer
-
-
-## Introduction
+# Introduction
 &nbsp;&nbsp;&nbsp;Cloud technology, a relatively new technology that is based on utilising the internet infrastructure to the fullest has seen a major increase in popularity in recent years. This success could be attributed to the huge growth of the Tech Industries that seen many new Unicorns; a term first mentioned by Aileen Lee on 2013, used to describe privately owned start-up companies that valued more than 1 billion USD. One of many reasons why the emergence of these "Unicorns" of Tech world brought popularity to Cloud technologies is that Cloud technologies provide a huge benefit to a start-up companies to further expanse and scale their business with greater flexibility and relatively minimum cost and commitment. Start-up companies now have an option to rent the necessary hardware infastructure instead of investing huge capital on it, since many of the established Tech companies such as Google and Amazon provide access to their extensive range of hardware to be rent. These infrastructures could then be run via virtualisation methods in which provide a great flexibility of scaling.
   
 &nbsp;&nbsp;&nbsp;Cloud technologies have been utilised in many parts of the modern society, one of them being for rendering high-resolution images. The implementation of the cloud technologies in rendering task, would eliminate the hardware constraint for the client or the user. An example of this implementation could be found in rendering model in "Image-Based Network Rendering of Large Meshes for Cloud Computing" (Okamoto et al. 2010). This report would evaluate the performance of GPU nodes in a scalable cloud architecture that are used to produce a Terapixel 3D City visualization of Newcastle Upon Tyne.
@@ -22,9 +19,9 @@ knitr::opts_chunk$set(fig.align = "center")
 &nbsp;&nbsp;&nbsp;To gain the information adaquate to create an evaluation on the performance of the GPU nodes capabilities to render the terapixel visualizations, a data mining process following a CRISP-DM best data mining practice would be conducted. The tools that would be used to carry out the data mining process are Rstudio combined with the Project Template package to streamlined the data mining process. 
   
   
-## CRISP-DM Methodology
+# CRISP-DM Methodology
 
-### Business Objective
+## Business Objective
 &nbsp;&nbsp;&nbsp; The scalable cloud architecture that was created to support the terapixel images rendering in order for it to be accessible for users without putting a constraint on the users hardware. Therefore it might be crucial to be able to extract performance information out of the hardware, in this case, the GPU, to further re-evaluate the amount of GPU nodes and its type needed to run the current rendering process or to create a plan for future usage. The goal of this data mining project is to be able to extract the performance evaluation information out of the current cloud-architecture that is currently use to support the terapixel image rendering. The information extracted would then be able to be used to improve the cost efficiency of running the current cloud-architecture or create future planning to prepare for an expansion.  
 &nbsp;&nbsp;&nbsp; To help achieving the goals mentioned above, this data mining project would be done using the best practice CRISP-DM methodology, and would be done entirely on R environment supported by the Project Template package and git version control to further streamline the data mining process. 
   
@@ -37,7 +34,7 @@ source("src/analysis1.R")
 
 ```
   
-### Data understanding
+## Data understanding
 
 &nbsp;&nbsp;&nbsp; There are three data frames available in which the data mining process could be implemented. These data frames are extracted from the application checkpoint and system metric output from the production of terapixel image. Each data frames are in the comma-separated value format in which it could be loaded directly into R by placing the data frames into the data folder of the Project Template, and loading the project. The three data frames mentioned consist of Application Checkpoint data, GPU data, and Task X Y data.  
 
@@ -56,6 +53,6 @@ ggplot(eventNamesData, aes(x = duration, y = AvgGPUUtilPerc, fill = eventName)) 
   
 ```{r, echo = FALSE}
 
-include_graphics("C:/image/Colored_EventNames_Pairs.jpeg",auto_pdf = getOption("knitr.graphics.auto_pdf", TRUE))
+include_graphics("C:/image/complete_eventNamesPairsData.jpeg",auto_pdf = getOption("knitr.graphics.auto_pdf", TRUE))
 ```
 
