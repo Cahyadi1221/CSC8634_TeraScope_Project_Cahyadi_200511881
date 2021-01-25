@@ -7,12 +7,21 @@ library(GGally)
 library(knitr)
 load.project()
 
-# Check the duplicates on the original data
+# Check the duplicates on the original application checkpoints data
 
 applicationCheckpointDuplicates = anyDuplicated(Copy.of.application.checkpoints)
-# Run the variable to check the number of duplicates in the original data
+# Run the variable to check the number of duplicates in the original application checkpoint 
+# data
 applicationCheckpointDuplicates
 # There are 130821 duplicates within this data set
+
+# Check the duplicates for the gpu data
+gpuDataDuplicates = anyDuplicated(Copy.of.gpu)
+# Run the Variable to check the numer of duplicates on the gpu data
+gpuDataDuplicates
+
+# Check the GPU UUID
+length(unique(Copy.of.gpu$gpuUUID))
 
 # Therefore in the wrangling process, the usage of unique(data) to avoid processing 
 # duplicates is validated. 

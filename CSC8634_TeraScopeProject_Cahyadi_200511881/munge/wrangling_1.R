@@ -155,10 +155,6 @@ for (hostf in hostnameListF){
     gpudataSaving = subset(tempHostnameGPUFunction, timestamp_H_M_S >= tasklistloopStartSaving$timestamp_H_M_S 
                            & timestamp_H_M_S <= tasklistloopStopSaving$timestamp_H_M_S)
     
-    # Because for this particular event, it is < 1 second, there might be a lot of
-    # data individuals that have missing values, therefore we take the 2 closest 
-    # timestamp values. 1 for the low limit(START timestamp) and 1 for the high limit
-    # (STOP timestamp)
     
     # Column Bind the Duration, and the GPU conditions with the hostname, jobId, and taskId
     tasklistloopSaving = cbind(tasklistloopStartSaving[,c(2,5,6)],savingConfigStart,savingConfigStop,
