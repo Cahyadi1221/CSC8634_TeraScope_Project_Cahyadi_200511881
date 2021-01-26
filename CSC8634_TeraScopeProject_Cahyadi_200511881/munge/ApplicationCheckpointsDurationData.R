@@ -13,3 +13,4 @@ Durations <- applicationCheckpoints %>%
     )
 Durations[,"duration"] = as.duration(Durations$STOP - Durations$START)
 cache('Durations')
+

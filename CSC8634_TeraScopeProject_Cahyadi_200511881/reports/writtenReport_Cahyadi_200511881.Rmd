@@ -117,13 +117,35 @@ summary(task.x.y)
 &nbsp;&nbsp;&nbsp; Before analyses would be made, the data frames mentioned and described on the Data Understanding section, would need to be processed first. The process includes but not limited to data wrangling, removing duplicates, merging data frames, and extracting new features from the data. In this part of the report, the processes that are applied to the data frames would be discussed and explanations would be given.  
 &nbsp;&nbsp;&nbsp Before any data merging could be done, each individual data frame would be processed first. The data processing is done based on the information gained from the assessment of each data frame that is highlighted in the Data Understanding section of this report.  
   
-### _** Application Checkpoints Data**_
+### _**Application Checkpoints Data**_   
   
-&nbsp;&nbsp;&nbsp; Referring to the initial data assessment of the Application Checkpoints data frame, data points duplicates would be removed. Removing the duplicates on the Application Checkpoints would leave us with a data frame which has `r nrow(unique(Copy.of.application.checkpoints))` data points and removing `r anyDuplicated(Copy.of.application.checkpoints)` duplicates. The reason to remove any duplicates is to avoid having any error during the analyses or avoid having a data that is skewed.  
+&nbsp;&nbsp;&nbsp; Referring to the initial data assessment of the Application Checkpoints data frame, data points duplicates would be removed. Removing the duplicates on the Application Checkpoints would leave us with a data frame which has `r nrow(unique(Copy.of.application.checkpoints))` data points and removing `r anyDuplicated(Copy.of.application.checkpoints)` duplicates. The reason to remove any duplicates is to avoid having any error during the analyses or producing an analysis that is skewed.  
+&nbsp;&nbsp;&nbsp; The _**"timestamp"**_ column of the Application Checkpoints could not be directly used as a method of analyses since the type of values that are present in the column are characters. Therefore we would process the _**"timestamp"**_ column and extract only the numerical time value out of the _**"timestamp"**_. The dates that are recorded on the _**"Timestamp"**_ are all showing the same date which is **2018-11-08** with varying times. Therefore, for the analyses, only the time would be extracted and would be converted into the Hour:Min:Sec format.  
+&nbsp;&nbsp;&nbsp; For the *Event Name* column, the number of data points for each event names seems to be the same, indicating that for all the task that is present in the data, each task includes all possible event names. The Distribution table of the *Event Name* column is shown as below  
+
+```{r, echo = FALSE}
+applicationCheckpointDistinct = unique(Copy.of.application.checkpoints)
+table(applicationCheckpointDistinct$eventName)
+```
+
+&nbsp;&nbsp;&nbsp; Each event name recorded on the data 131586 times, which if divided by the number of **Event Type**  of each Event Name which is 2, would equal to the amount of distinct **Task ID**. With these information at hand,we would proceed with wrangling the data, to prepare it for analyses. The wrangling process are done in these manners  
+  
+  1. Ensure that the Applicaton Checkpoints data does not contains any duplicated data points. If there are any, remove the duplicated data points. 
+  2. Extract only the time characters out of the _**Timestamp**_ column and change the format to that of an Hour:Minute:Second format.
+  3. Transform the _**Event Type**_ row into two separate columns which are _**START**_ and _**STOP**_ .
+  4. Fill these new columns _**START**_ and _**STOP**_ with the **Timestamp** for each **Event Name** which has **Event Type** that matched each of these two new columns. 
+  5. Create a new feature called **Duration** which would store the duration of each event, which is calculated by subtracting the _**STOP**_ and _**START**_ column. This newly made feature **Duration** is what would be used in analyses as a metric that describe the length of an event.   
+  
+&nbsp;&nbsp;&nbsp; The resulting data frame would be   
+```{r, echo=FALSE}
+# Call the wrangled application checkpoint data
+head(Durations)
+```
 
 
 
-```{r echo=, fig.height=4, fig.width=6}
+
+```{r ,echo= FALSE , fig.height=4, fig.width=6}
 ggplot(eventNamesData, aes(x= duration, y= AvgGPUTempC, fill = eventName)) +geom_hex()
 ```
 
@@ -134,6 +156,6 @@ ggplot(eventNamesData, aes(x = duration, y = AvgGPUUtilPerc, fill = eventName)) 
   
 ```{r, echo = FALSE}
 
-include_graphics("C:/image/complete_eventNamesPairsData.jpeg",auto_pdf = getOption("knitr.graphics.auto_pdf", TRUE))
+include_graphics("C:/image/complete_eventNamesPairsData.jpeg")
 ```
 
