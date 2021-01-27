@@ -22,11 +22,20 @@ knitr::opts_chunk$set(fig.align = "center")
 # **CRISP-DM Methodology**
 
 ## **Business Objective**
-&nbsp;&nbsp;&nbsp; The scalable cloud architecture that was created to support the terapixel images rendering in order for it to be accessible for users without putting a constraint on the users hardware. Therefore it might be crucial to be able to extract performance information out of the hardware, in this case, the GPU, to further re-evaluate the amount of GPU nodes and its type needed to run the current rendering process or to create a plan for future usage. The goal of this data mining project is to be able to extract the performance evaluation information out of the current cloud-architecture that is currently use to support the terapixel image rendering. The information extracted would then be able to be used to improve the cost efficiency of running the current cloud-architecture or create future planning to prepare for an expansion.  
+&nbsp;&nbsp;&nbsp; The scalable cloud architecture that was created to support the terapixel images rendering in order for it to be accessible for users without putting a constraint on the users hardware. Therefore it might be crucial to be able to extract performance information out of the hardware, in this case, the GPU, to further re-evaluate the amount of GPU nodes and its type needed to run the current rendering process or to create a plan for future usage. The goal of this data mining project is to be able to extract the performance evaluation information out of the current cloud-architecture that is currently use to support the terapixel image rendering. The information extracted would then be able to be used to improve the cost efficiency of running the current cloud-architecture or create future planning to prepare for an expansion. To aid in evaluating the performance of the cloud-architecture rendering process, these questions are provided as a guidance for the analyses. The questions are  
+
+  * Which event dominate the task run time
+  * Are there any implication that GPU temperature affect the performance of rendering process
+  * Are there any correlation between the increased power draw and render time 
+    - Quantify the variation in computation requirements for particular tile
+  * Are there any particular GPU cards (based on their serial number) that is distinct from the other in terms of performance
+  * Are there any inefficiencies detected for the task scheduling process
+
 &nbsp;&nbsp;&nbsp; To help achieving the goals mentioned above, this data mining project would be done using the best practice CRISP-DM methodology, and would be done entirely on R environment supported by the Project Template package and git version control to further streamline the data mining process. 
   
 ```{r include = FALSE}
 library(ProjectTemplate)
+library(gridExtra)
 load.project()
 
 # Source the code from analysis script in src folder
@@ -102,7 +111,7 @@ head(task.x.y)
 summary(task.x.y)
 ```
   
-&nbsp;&nbsp;&nbsp; Extracting information out of the Data Preview and the Data Summary above, the Task-X-Y Data consist of 6579 rows and 5 columns. The number of rows are equal to the number of task as shown by the taskId column. It has recuring columns from the Application Checkpoints data in taskId and JobId. This information should be taken into consideration when finding the correlation between the Application Checkpoints data and the Task-X-Y data. The Task-X-Y data columns that shows coordinate "X" and "Y" is deemed by the R system as a column of continouus variable, since the values inside the column are consisted of numerical value. However, note that since it only shows the coordinate of an object, the stats value extracted from these two columns might not be that beneficial for the analyses, although it still could be useful for determining whether a certain coordinates affect the performance of the rendering task. The "level" column is shown as a continuous variable on the data summary even though the "level" column represent zoom level of the rendered visualisation.  
+&nbsp;&nbsp;&nbsp; Extracting information out of the Data Preview and the Data Summary above, the Task-X-Y Data consist of 6579 rows and 5 columns. The number of rows are equal to the number of task as shown by the taskId column. It has recuring columns from the Application Checkpoints data in taskId and JobId. This information should be taken into consideration when finding the correlation between the Application Checkpoints data and the Task-X-Y data. The Task-X-Y data columns that shows coordinate "X" and "Y" is deemed by the R system as a column of continouus variable, since the values inside the column are consisted of numerical value. However, note that since it only shows the coordinate of an object, the stats value extracted from these two columns might not be that beneficial for the analyses, although it still could be useful for determining whether a certain coordinates affect the performance of the rendering task. The "level" column is shown as a continuous variable on the data summary even though the "level" column represent zoom level of the rendered visualisation. There are no duplicates detected within this data frame.    
 &nbsp;&nbsp;&nbsp; Assessing each column of the Task-X-Y data, a following interpretations could be extracted.  
 
   * _**Task ID**_ = Similar to the Application Checkpoints data, this column contains the ID of the Azure Batch task. Since it shows the same number of unique taskId as that of the Application Checkpoints data with `r length(unique(task.x.y$taskId))` unique task ID, it should be taken into consideration to link the task id from the Task-X-Y data with the task id in the Application Checkpoints data. 
@@ -115,13 +124,13 @@ summary(task.x.y)
 ## **Data Preparation**  
   
 &nbsp;&nbsp;&nbsp; Before analyses would be made, the data frames mentioned and described on the Data Understanding section, would need to be processed first. The process includes but not limited to data wrangling, removing duplicates, merging data frames, and extracting new features from the data. In this part of the report, the processes that are applied to the data frames would be discussed and explanations would be given.  
-&nbsp;&nbsp;&nbsp Before any data merging could be done, each individual data frame would be processed first. The data processing is done based on the information gained from the assessment of each data frame that is highlighted in the Data Understanding section of this report.  
+&nbsp;&nbsp;&nbsp; Before any data merging could be done, each individual data frame would be processed first. The data processing is done based on the information gained from the assessment of each data frame that is highlighted in the Data Understanding section of this report.  
   
 ### _**Application Checkpoints Data**_   
   
 &nbsp;&nbsp;&nbsp; Referring to the initial data assessment of the Application Checkpoints data frame, data points duplicates would be removed. Removing the duplicates on the Application Checkpoints would leave us with a data frame which has `r nrow(unique(Copy.of.application.checkpoints))` data points and removing `r anyDuplicated(Copy.of.application.checkpoints)` duplicates. The reason to remove any duplicates is to avoid having any error during the analyses or producing an analysis that is skewed.  
-&nbsp;&nbsp;&nbsp; The _**"timestamp"**_ column of the Application Checkpoints could not be directly used as a method of analyses since the type of values that are present in the column are characters. Therefore we would process the _**"timestamp"**_ column and extract only the numerical time value out of the _**"timestamp"**_. The dates that are recorded on the _**"Timestamp"**_ are all showing the same date which is **2018-11-08** with varying times. Therefore, for the analyses, only the time would be extracted and would be converted into the Hour:Min:Sec format.  
-&nbsp;&nbsp;&nbsp; For the *Event Name* column, the number of data points for each event names seems to be the same, indicating that for all the task that is present in the data, each task includes all possible event names. The Distribution table of the *Event Name* column is shown as below  
+&nbsp;&nbsp;&nbsp; The **"Timestamp"** column of the Application Checkpoints could not be directly used as a method of analyses since the type of values that are present in the column are characters. Therefore we would process the **"Timestamp"** column and extract only the numerical time value out of the **"Timestamp"**. The dates that are recorded on the **"Timestamp"** are all showing the same date which is _**2018-11-08**_ with varying times. Therefore, for the analyses, only the time would be extracted and would be converted into the Hour:Min:Sec format.  
+&nbsp;&nbsp;&nbsp; For the **Event Name** column, the number of data points for each event names seems to be the same, indicating that for all the task that is present in the data, each task includes all possible event names. The Distribution table of the **Event Name** column is shown as below  
 
 ```{r, echo = FALSE}
 applicationCheckpointDistinct = unique(Copy.of.application.checkpoints)
@@ -131,10 +140,10 @@ table(applicationCheckpointDistinct$eventName)
 &nbsp;&nbsp;&nbsp; Each event name recorded on the data 131586 times, which if divided by the number of **Event Type**  of each Event Name which is 2, would equal to the amount of distinct **Task ID**. With these information at hand,we would proceed with wrangling the data, to prepare it for analyses. The wrangling process are done in these manners  
   
   1. Ensure that the Applicaton Checkpoints data does not contains any duplicated data points. If there are any, remove the duplicated data points. 
-  2. Extract only the time characters out of the _**Timestamp**_ column and change the format to that of an Hour:Minute:Second format.
-  3. Transform the _**Event Type**_ row into two separate columns which are _**START**_ and _**STOP**_ .
-  4. Fill these new columns _**START**_ and _**STOP**_ with the **Timestamp** for each **Event Name** which has **Event Type** that matched each of these two new columns. 
-  5. Create a new feature called **Duration** which would store the duration of each event, which is calculated by subtracting the _**STOP**_ and _**START**_ column. This newly made feature **Duration** is what would be used in analyses as a metric that describe the length of an event.   
+  2. Extract only the time characters out of the **Timestamp** column and change the format to that of an Hour:Minute:Second format.
+  3. Transform the **Event Type** row into two separate columns from the two distinct value of **Event Type** column which are _**START**_ and _**STOP**_ .
+  4. Fill these new columns **START** and **STOP** with the **Timestamp** for each **Event Name** which has **Event Type** that matched each of these two new columns. 
+  5. Create a new feature called **duration** which would store the duration of each event, which is calculated by subtracting the **STOP** and **START** column. This newly made feature **duration** is what would be used in analyses as a metric that describe the length of an event.   
   
 &nbsp;&nbsp;&nbsp; The resulting data frame would be   
 ```{r, echo=FALSE}
@@ -142,20 +151,123 @@ table(applicationCheckpointDistinct$eventName)
 head(Durations)
 ```
 
-
-
-
-```{r ,echo= FALSE , fig.height=4, fig.width=6}
-ggplot(eventNamesData, aes(x= duration, y= AvgGPUTempC, fill = eventName)) +geom_hex()
+&nbsp;&nbsp;&nbsp; To aid with the analyses that concerns with the usage of duration column, a horizontal data frame is created in which there are 5 new columns created by using the **Event Name** values as column name and the **duration** of the corresponding **Event Name** would be the values resided within these newly made columns. The resulting data frame would be 
+```{r, echo=FALSE}
+# Call the horizontal data
+print(head(horizontalDurations), options(tibble.width = Inf ))
 ```
-
+&nbsp;&nbsp;&nbsp; Do note that the newly made columns that are based on the **Event Name** column values are not set up in a chronological order in which for each task, the order of event should be, _**Saving Config**_, _**Render**_, _**Tiling**_, and _**Uploading**_. We would only use this newly made horizontal data to aid in extracting the average duration of each event name to be used for analyses.  
   
+  
+### _**GPU Data**_   
+  
+&nbsp;&nbsp;&nbsp; The GPU Data as shown on the Data Understanding part of this report, has some duplicated data points, therefore before any analyses or wrangling is done on this data set, the GPU data set needs to be cleared of this duplicated data points. After removing the data points, the number of rows on the GPU Data would be `r nrow(unique(Copy.of.gpu))` down from the original number of rows for the GPU data of `r nrow(Copy.of.gpu)` data points. Since there are not much information that could be extracted from the GPU data alone, therefore the wrangling that is done for this data set is merely to prepare it for merging this data frame with other data frame on this project. Other than removing any duplicates from the data, the **Timestamp** column of the GPU data would also be transformed into the Hour:Min:Sec format, just as has been done to the **Timestamp** column of the application checkpoints.   
+  
+### _**Task-X-Y Data**_  
+  
+&nbsp;&nbsp;&nbsp; Similar to the GPU data frame, the Task-X-Y data by itself, does not have any noticeable information that could be extracted. And since the Task-X-Y data does not contain any duplicated data points, therefore there is no individual wrangling done to this data.  
+  
+### _**Merging Application Checkpoints Data with GPU Data**_
+  
+&nbsp;&nbsp;&nbsp; To extract necessary information out of the GPU data, the GPU data needs to be merged with the Application Checkpoints data to gather detailed information regarding the tasks or event tasks that are being run on the GPU nodes at a current point of time. The merged should be by **Hostname** and **Timestamp** columns, however the merge for the **Timestamp** column should not be done so directly, since the **Timestamp** of the GPU data only record the GPU condition every 2 seconds, and if we merged it directly, it would only bear 232 matching results. To tackle this problem, the GPU condition for a particular task is calculated by the average GPU condition during the length of the task itself. An example for this calculation if _**Total Render**_ event started at _**8H 1M 29.305S**_ and ended at _**8H 0M 44.142S**_ we would apply a conditional that would extract all the GPU conditions recorded within this time frame, and for this particular event, we would use the average GPU condition between the two timestamps above to be recorded as the GPU condition of the particular event. With this conditional we are successful on creating the desired data. The data frame that are created are based on the horizontal data, and would bear 40 columns. Since not all the columns would be visible if shown here, below is only a preview of the first view columns of the data that are part of the _**Total Render**_ event name.
+#### _Data Preview_
 ```{r, echo = FALSE}
-ggplot(eventNamesData, aes(x = duration, y = AvgGPUUtilPerc, fill = eventName)) + geom_hex()
+head(finalData[,1:12])
+```
+
+&nbsp;&nbsp;&nbsp; However, after carefully assessing the data, it is found that there is some problem detected on the wrangled data. Since the GPU data **Timestamp** only record the timestamp every 2 seconds, an event name that has duration less than 2 seconds, would return a _**NaN**_ or not a number value. To mitigate this problem, for the GPU conditions that returns _**NaN**_ value would be subjected to another conditional in which, the GPU conditions for this particular event name is average of GPU conditions of the two closest timestamp on the GPU Data to the START and STOP timestamp of this particular event. For example, a _**Saving Config**_ event happen between _**7H 56M 50.424S**_ and _**7H 56M 50.426S**_ and there are no GPU condition that are recorded between that time for the particular hostname. Therefore, we would take the GPU condition of the particular hostname with the timestamp that is earlier than but is the closest to _**7H 56M 50.424S**_ and the one which is latter but closest to _**7H 56M 50.426S**_ and we would take the average between these two closest timestamps and record it as the GPU condition of the corresponding _**Saving Config**_ event. There are both data that has been wrangled horizontally with each event name with its each corresponding features as columns and data that is wrangled vertically meaning that the event names are still contained within the **Event Name** column. But for the preview below, we choose to preview the data that is wrangled vertically so that it is more compact in width. 
+```{r, echo = FALSE}
+head(verticalData_Raw)
 ```
   
+### _**Merging the Merged Data Frame with Task-X-Y Data**_ 
+  
+&nbsp;&nbsp;&nbsp; Merging the merged GPU and Application Checkpoints data frame with the Task-X-Y data frame is done by specifying the merge by **Task Id** and **Job Id** columns. For the Horizontal data, the merge would bear 65793 rows while for the vertical data the merge would bear 328965 rows.  
+  
+  
+## **Data Analyses and Modelling**
+
+&nbsp;&nbsp;&nbsp; To reach the goal and answer the questions mentioned in the earlier part of the report, analyses would be made on the data that we have gathered and processed. The analyses would be done in a structure based on the order of the questions mentioned on the Business Objective part of the report. However before any analyses could be made, and initial analysis would be done on the entire data to provide a broad overview of the data and extract some interesting features.  
+  
+### _**Numerrical Summaries of the Data**_
+  
+&nbsp;&nbsp;&nbsp Extracting the numerical summaries out of the numerical value of the data would bear us
+```{r, echo = FALSE}
+summary(verticalData_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")])
+```
+With variation for each column 
+```{r, echo=FALSE}
+diag(var(verticalData_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")]))
+```
+&nbsp;&nbsp;&nbsp; Based on the numerical summaries extracted from the data as shown above, it seems that out of the numerical columns on the data, the column or feature that has the most variation belong to the **Percent Utilisation of GPU Cores**. The **GPU Temperature** seems to have a really low variation. This information might be used to answer the questions stated on the Business Objective of the report in regards to the GPU Temperature.   
+  
+### _**Graphical Summaries of the Data**_
 ```{r, echo = FALSE}
 
 include_graphics("C:/image/complete_eventNamesPairsData.jpeg")
 ```
+&nbsp;&nbsp;&nbsp; From the graph above, most of the feature that relates to GPU performance such as **duration**, **GPU Power Draw**, **Percent Utilisation of GPU Cores** and **Percent Utilisation of GPU Memory** show that data points that belong to _**Render**_ event name tends to reside on the upper side of these graphs. Therefore it might be indicated that _**Render**_ demand more performance on the GPU node than other event name. It seems there are interesting traits based on the correlation value on some of these combination of features plots. These interesting correlation traits are found between these variables  
+
+  * **Duration** and **GPU Power Draw** with a correlation score between the two showing 0.835
+  * **Duration** and **Percent Utilisation of GPU Cores** with a correlation score between the two showing 0.844
+  * **Duration** and **Percent Utilisation of GPU Memory** with a correlation score between the two showing 0.862
+  * **Percent Utilisation of GPU cores** and **GPU Power Draw** with a correlation score between the two showing 0.929
+  * **Percent Utilisation of GPU memory** and **GPU Power Draw** with a correlation score between the two showing 0.943
+  * **Percent Utilisation of GPU cores** and **Percent Utilisation of GPU memory** with a correlation score between teh two showing 0.984
+
+&nbsp;&nbsp;&nbsp; Apart from the traits shown above, **GPU Temperature** feature doesn't show any strong correlation with any other features shown on the graph above since all the correlation between the **GPU Temperature** and other feature show correlation score below 0.4. These information gathered from plotting the graphs above, would be assessed further to answer the questions stated on the Business Objective part of this report. 
+  
+  
+### **Determining Event which Dominate the Task Run Time**
+  
+  
+&nbsp;&nbsp&nbsp; To answer the question regarding which Event dominates the task run time, a box plot would be plotted to show the spread and mean of each event name duration. 
+```{r, echo = FALSE}
+ggplot(verticalData_Raw, aes(y=duration, x=eventName, fill = eventName)) + geom_boxplot()
+```
+&nbsp;&nbsp&nbsp;&nbsp; Based on the graph above, a conclusion could be drawn that the _**Render**_ event name dominates the task run time since the box plot of _**Render**_ event is nearly identical with the _**Total Render**_ event name that represent the whole length of the task run time. To quantify the result of the box plot graph above, a numerical summaries are extracted from the data that contains the duration of each event name.
+
+#### _**Data Preview**_
+```{r,echo = FALSE}
+head(horizontalDurations)
+```
+&nbsp;&nbsp;&nbsp; Extracting the mean out of the data would give us a result of 
+```{r, echo = FALSE}
+colMeans(horizontalDurations[,4:8])
+```
+&nbsp;&nbsp;&nbsp; These result further cemented the narrative in which _**Render**_ event dominate the task run time by more than 90%. 
+  
+### **Implications on Temperature of GPU Affecting the Rendering Performance**
+  
+&nbsp;&nbsp;&nbsp; GPU capabilities are measured by its performance to succesfully render an object. Since there are no information given on the complexity of the object being rendered, it is assumed that each tile of the rendered object are equal in memory size, therefore the metric in which the GPU performance is measured is in terms of the length of the render process. Therefore, to check on the implications on Temperature of GPU affecting the GPU performance, we would like to revisit the plot that shows the correlation between the Duration of rendering task and the temperature of the GPU during this process. To asses this, we would use only the _**Total Render**_ event name that represent the whole length of the task itself.
+```{r ,echo= FALSE , fig.height=4, fig.width=6}
+ggplot(totalRenderData, aes(x= duration, y= AvgGPUTempC)) +geom_hex() + ggtitle("GPU Temperature(Celsius) VS Task Duration Graph")
+```
+&nbsp;&nbsp;&nbsp; Based on the GPU Temperature vs Task Duration graph,it seems that there are no strong correlation between the two variables. The graph didn't show any noticeable trend and the spread of the data appeared randomly scattered and there seems to be a high volume of data points around the mean of both variable. To further quantify this deduction, the correlation matrix between the **GPU Temperature** and the **Duration** of the task show a score of  
+```{r, echo= FALSE}
+cor(totalRenderData[,c("duration","AvgGPUTempC")])
+```
+  
+&nbsp;&nbsp;&nbsp; The deduction from the GPU Temperature vs Task Duration Graph, and further supported by the correlation matrix between the two variables, shows that there are no implications that Temperature of GPU affect the Performance of the GPU rendering capabilities that are measure by the length of the render as performance metric.  
+  
+### **Connection Between the Increased Power Draw and Render Time**
+  
+```{r, echo=FALSE}
+
+cor(totalRenderData[,c(7,10,14,15)])
+
+```
+
+
+```{r, echo= FALSE, fig.height=4, fig.width=6}
+ggplot(totalRenderData, aes(x = duration, y = AvgPowerDrawWatt)) + geom_hex()
+```
+
+
+```{r, echo= FALSE, fig.height=4, fig.width=8}
+p1 = ggplot(totalRenderData, aes(x = duration, y = x)) + geom_hex()
+p2 = ggplot(totalRenderData, aes(x = duration, y = y)) + geom_hex()
+grid.arrange(p1,p2,ncol=2)
+```
+
 
