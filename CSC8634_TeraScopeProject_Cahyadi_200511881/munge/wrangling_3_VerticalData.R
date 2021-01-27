@@ -444,6 +444,11 @@ cache('verticalData_merged_Raw')
 
 # Separate the Total Render which constitute the whole task length into an individual data set
 totalRenderData = subset(eventNamesData, eventName == "TotalRender")
+# Extract the GPU Serial as a feature
+totalRenderData[,"gpuSerialFeature"] = as.factor(totalRenderData[,"gpuSerial"])
+totalRenderData[,"gpuSerialFeature"] = as.numeric(totalRenderData[,"gpuSerialFeature"])
+totalRenderData[,"gpuSerial"] = as.character(totalRenderData[,"gpuSerial"])
+
 cache('totalRenderData')
 
 # Create a version of the vertical data in which does not include the Total Render

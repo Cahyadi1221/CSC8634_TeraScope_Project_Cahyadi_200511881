@@ -183,13 +183,26 @@ head(verticalData_Raw)
 ### _**Merging the Merged Data Frame with Task-X-Y Data**_ 
   
 &nbsp;&nbsp;&nbsp; Merging the merged GPU and Application Checkpoints data frame with the Task-X-Y data frame is done by specifying the merge by **Task Id** and **Job Id** columns. For the Horizontal data, the merge would bear 65793 rows while for the vertical data the merge would bear 328965 rows.  
+
+### _**Subsetting the data based on Event Name**_  
+  
+&nbsp;&nbsp;&nbsp; To streamlined the analyses, the main data would also be subset in terms of its event name and **GPU Serial** column values are extracted as a feature to be recorded into a new column **GPU Serial Feature**. The subset would produce these data frames 
+
+  * totalRenderData = A data frame that contains only event name _**Total Render**_.  
+  * eventNamesData = A data frame that contains all event names apart from _**Total Render**_ . In this data frame, the **Event Name** column is also extracted as feature, creating a new feature **Event Name Feature** in which, the event name is turned into a factor, and turned into numerical class for analyses.
+  * savingConfigData = A data frame that contains only event name _**Saving Config**_
+  * renderData =  A data frame that contains only event name _**Render**_
+  * tilingData = A data frame that contains only event name _**Tiling**_
+  * uploadingData = A data frame that contains only event name _**Uploading**_
+
+&nbps;&nbsp;&nbsp; These data subsets are created in order for separate analyses for different event name could be executed. 
   
   
 ## **Data Analyses and Modelling**
 
 &nbsp;&nbsp;&nbsp; To reach the goal and answer the questions mentioned in the earlier part of the report, analyses would be made on the data that we have gathered and processed. The analyses would be done in a structure based on the order of the questions mentioned on the Business Objective part of the report. However before any analyses could be made, and initial analysis would be done on the entire data to provide a broad overview of the data and extract some interesting features.  
   
-### _**Numerrical Summaries of the Data**_
+### _**Numerical Summaries of the Data**_
   
 &nbsp;&nbsp;&nbsp Extracting the numerical summaries out of the numerical value of the data would bear us
 ```{r, echo = FALSE}
@@ -221,53 +234,110 @@ include_graphics("C:/image/complete_eventNamesPairsData.jpeg")
 ### **Determining Event which Dominate the Task Run Time**
   
   
-&nbsp;&nbsp&nbsp; To answer the question regarding which Event dominates the task run time, a box plot would be plotted to show the spread and mean of each event name duration. 
-```{r, echo = FALSE}
-ggplot(verticalData_Raw, aes(y=duration, x=eventName, fill = eventName)) + geom_boxplot()
+&nbsp;&nbsp;&nbsp; For the analysis regarding to the question of which event dominates the task run time, we will use the wrangled application checkpoint data with new feature **duration** as a whole. Meaning that the event name still contains the _**Total Render**_ event. To answer the question regarding which Event dominates the task run time, a box plot would be plotted to show the spread and mean of each event name duration. 
+```{r echo= FALSE, fig.height=4, fig.width=6}
+ggplot(verticalData_Raw, aes(y=duration, x=eventName, fill = eventName)) + geom_boxplot() + ggtitle("Event Names Run Time") + theme(plot.title = element_text(hjust = 0.5))
 ```
-&nbsp;&nbsp&nbsp;&nbsp; Based on the graph above, a conclusion could be drawn that the _**Render**_ event name dominates the task run time since the box plot of _**Render**_ event is nearly identical with the _**Total Render**_ event name that represent the whole length of the task run time. To quantify the result of the box plot graph above, a numerical summaries are extracted from the data that contains the duration of each event name.
+&nbsp;&nbsp;&nbsp; Based on the graph above, a conclusion could be drawn that the _**Render**_ event name dominates the task run time since the box plot of _**Render**_ event is nearly identical with the _**Total Render**_ event name that represent the whole length of the task run time. To quantify the result of the box plot graph above, a numerical summaries are extracted from the data that contains the duration of each event name.
 
 #### _**Data Preview**_
 ```{r,echo = FALSE}
 head(horizontalDurations)
 ```
-&nbsp;&nbsp;&nbsp; Extracting the mean out of the data would give us a result of 
+Extracting the mean out of the data would give us a result of 
 ```{r, echo = FALSE}
 colMeans(horizontalDurations[,4:8])
+```
+With a variance of
+```{r, echo = FALSE}
+diag(var(horizontalDurations[,4:8]))
 ```
 &nbsp;&nbsp;&nbsp; These result further cemented the narrative in which _**Render**_ event dominate the task run time by more than 90%. 
   
 ### **Implications on Temperature of GPU Affecting the Rendering Performance**
   
-&nbsp;&nbsp;&nbsp; GPU capabilities are measured by its performance to succesfully render an object. Since there are no information given on the complexity of the object being rendered, it is assumed that each tile of the rendered object are equal in memory size, therefore the metric in which the GPU performance is measured is in terms of the length of the render process. Therefore, to check on the implications on Temperature of GPU affecting the GPU performance, we would like to revisit the plot that shows the correlation between the Duration of rendering task and the temperature of the GPU during this process. To asses this, we would use only the _**Total Render**_ event name that represent the whole length of the task itself.
+&nbsp;&nbsp;&nbsp; For the analysis used to answer the question regarding the interplay between the GPU temperature and GPU performance, we would use the **Total Render Data** data frame in which the data contains information of the average GPU condition during the length of an event and only contains event name _**Total Render**_ to represent the whole task. GPU capabilities are measured by its performance to succesfully render an object. Since there are no information given on the complexity of the object being rendered, it is assumed that each tile of the rendered object are equal in memory size, therefore the metric in which the GPU performance is measured is in terms of the length of the render process. Therefore, to check on the implications on Temperature of GPU affecting the GPU performance, we would like to revisit the plot that shows the correlation between the Duration of rendering task and the temperature of the GPU during this process. To asses this, we would use only the _**Total Render**_ event name that represent the whole length of the task itself.
 ```{r ,echo= FALSE , fig.height=4, fig.width=6}
-ggplot(totalRenderData, aes(x= duration, y= AvgGPUTempC)) +geom_hex() + ggtitle("GPU Temperature(Celsius) VS Task Duration Graph")
+ggplot(totalRenderData, aes(x= duration, y= AvgGPUTempC)) +geom_hex() + ggtitle("GPU Temperature(Celsius) VS Task Duration Graph") + theme(plot.title = element_text(hjust = 0.5)) 
 ```
 &nbsp;&nbsp;&nbsp; Based on the GPU Temperature vs Task Duration graph,it seems that there are no strong correlation between the two variables. The graph didn't show any noticeable trend and the spread of the data appeared randomly scattered and there seems to be a high volume of data points around the mean of both variable. To further quantify this deduction, the correlation matrix between the **GPU Temperature** and the **Duration** of the task show a score of  
 ```{r, echo= FALSE}
-cor(totalRenderData[,c("duration","AvgGPUTempC")])
+knitr::kable(cor(totalRenderData[,c("duration","AvgGPUTempC")]))
 ```
   
 &nbsp;&nbsp;&nbsp; The deduction from the GPU Temperature vs Task Duration Graph, and further supported by the correlation matrix between the two variables, shows that there are no implications that Temperature of GPU affect the Performance of the GPU rendering capabilities that are measure by the length of the render as performance metric.  
   
-### **Connection Between the Increased Power Draw and Render Time**
+### **Connection Between the Increased Power Draw and Render Time and Computational Variation for Particular Tile**
   
+&nbsp;&nbsp;&nbsp; For this analysis we would use the **Total Render Data** data frame once again. To answer the question regarding the correlation between an increased power draw and the duration of render, a graph between the two feature variable **GPU Power Draw** and **duration** would be plotted and produce result of
+```{r, echo= FALSE, fig.height=4, fig.width=6}
+ggplot(totalRenderData, aes(x = duration, y = AvgPowerDrawWatt)) + geom_hex() + ggtitle("Power Draw vs Task Duration Graph") + theme(plot.title = element_text(hjust = 0.5))
+```
+&nbsp&nbsp&nbsp; Looking at the graph above, there is a slight positive correlation trend is detected between the two variables. However, based on this graph alone, there is no clear indication that increased power draw resulted in longer duration or the other way around. Therefore to better understand the correlation between the two variables, a correlation matrix is produced.
 ```{r, echo=FALSE}
 
-cor(totalRenderData[,c(7,10,14,15)])
+cor(totalRenderData[,c(7,10)])
 
 ```
-
-
-```{r, echo= FALSE, fig.height=4, fig.width=6}
-ggplot(totalRenderData, aes(x = duration, y = AvgPowerDrawWatt)) + geom_hex()
-```
-
-
+&nbsp;&nbsp;&nbsp; The correlation matrix shows that there is some correlation between the **GPU Power Draw** and the **Duration** of the render task, however the correlation is not strong, therefore it could be deducted that the **Duration** of an event task does not influence the **Power Draw** or the other way around. Therefore, it prompt a question on what truly drives the increase in **Power Draw** or what caused the render task to run longer. In an attempt to answer these, we would like to perform analysis on the image tile itself (X and Y coordinate) in regards to its rendering time and the variation of the computational requirements for a certain tile.   
+&nbsp;&nbsp;&nbsp; First we would like to check each coordinate axis and observe whether there is certain coordinate points that are rendered slowly compared to the average render time of other coordinates within the same axis. Therefore, a hex plot graph is produced
 ```{r, echo= FALSE, fig.height=4, fig.width=8}
+library(grid)
+library(gridExtra)
 p1 = ggplot(totalRenderData, aes(x = duration, y = x)) + geom_hex()
 p2 = ggplot(totalRenderData, aes(x = duration, y = y)) + geom_hex()
-grid.arrange(p1,p2,ncol=2)
+grid.arrange(p1,p2,ncol=2,top = textGrob("Tile Coordinates and Its Render time",gp=gpar(fontsize=20,font=3))) 
 ```
+&nbsp;&nbsp;&nbsp; Based on the graphs above, for the X-axis coordinates graph, it seems the tiles that have render time which are more than 70 seconds are X coordinates between 100, and as for the Y-axis coordinates graph, the same could be said the same that there are tile which belongs around the 100 Y-coordinats that took more than 70 seconds to render. However, on the Y-coordinate graph, there are also a small cluster of tiles which took more than 60 second to render. The tiles in question have Y-coordinate around 0.
+  
+&nbsp;&nbsp;&nbsp; Now to look at computational variance for different tile coordinates we would plot graphs for each computational columns of the data. 
+
+```{r, echo = FALSE, fig.height=4, fig.width=8}
+p3 = ggplot(totalRenderData, aes(x = AvgPowerDrawWatt, y = x)) + geom_hex()
+p4 = ggplot(totalRenderData, aes(x = AvgPowerDrawWatt, y = y)) + geom_hex()
+grid.arrange(p3,p4,ncol=2,top = textGrob("Tile Coordinates and Its GPU Power Draw(Watt)",gp=gpar(fontsize=20,font=3)))
+```
+
+
+```{r, echo = FALSE, fig.height = 4, fig.width= 8}
+p5 = ggplot(totalRenderData, aes(x = AvgGPUUtilPerc, y = x)) + geom_hex()
+p6 = ggplot(totalRenderData, aes(x = AvgGPUUtilPerc, y = y)) + geom_hex()
+grid.arrange(p5,p6,ncol=2,top = textGrob("Tile Coordinates and Its GPU Utilisation(%)",gp=gpar(fontsize=20,font=3)))
+```
+```{r, echo= FALSE, fig.height=4, fig.width=8}
+
+p7 = ggplot(totalRenderData, aes(x = AvgGPUMemUtilPerc, y = x)) + geom_hex()
+p8 = ggplot(totalRenderData, aes(x = AvgGPUMemUtilPerc, y = y)) + geom_hex()
+grid.arrange(p7,p8,ncol=2,top = textGrob("Tile Coordinates and Its GPU Memory Utilisation(%)",gp=gpar(fontsize=20,font=3)))
+
+```
+&nbsp;&nbsp;&nbsp; Based on the GPU conditions graph in regards to Image tile coordinate above, there is no clear correlation that could be drawn between the position of image tile being rendered and the increase of computational requirement. However, there is one more feature that we could explore, which is the level of render which contributes to the level of zoom of the image.
+
+
+
+### **Identifying GPU Card whose Performance Differ from Others**
+  
+&nbsp;&nbsp;&nbsp There are a total of `r length(unique(totalRenderData$gpuSerial))`  type of physical GPU cards used on the current Cloud Architecture, and we would like to gather the information regarding the performance of each type of GPU cards. To aid in identifying which GPU card perform better or worse than the rest, we would plot a graph in which it will show the average render run time for each type of GPU cards.
+```{r echo= FALSE, fig.height=4, fig.width=6}
+ggplot(totalRenderData, aes(y = duration, group = gpuSerial, fill = gpuSerial)) + geom_boxplot() + ggtitle("Average Task Duration for Each GPU Serial") + theme(plot.title = element_text(hjust = 0.5)) 
+
+```
+&nbsp;&nbsp;&nbsp; From the graph, we could observe that out of the 12 GPU cards type, there are 2 that performs slightly worse than the other which are GPU with serial number of _**3.24117e+11**_ and _**3.24317e+11**_ . To quantify the graph, we extract the average run time for each type of GPU cards. 
+
+```{r, echo = FALSE}
+means = aggregate(duration~gpuSerial, totalRenderData, mean)
+knitr::kable(means) 
+```
+&nbsp;&nbsp;&nbsp; From both the graph and the numerical summaries above, we could deduct that out of the 12 distinct GPU Serials, the two GPU Serials that perform the worst are GPU Serial _**3.24117e+11**_ and _**3.24317e+11**_ with average render run time of _**45.36851 Seconds**_ and _**45.29177	Seconds**_ respectively. And the GPU Serial that perform the best is GPU Serial _**3.23617e+11**_ with average render run time of _**41.68215 Seconds**_. The difference might not be much at glance but if we take into account the number of tiles that needs to be rendered which is 655536 tiles in total even after considering all 1024 hostnames working together at a same time, even 1 second difference in average rendering time would result in great inefficiency. Therefore it should be taken into consideration to opt for the fastest type of GPU cards.
+
+### **Efficiency of the Task Scheduling**
+  
+&nbsp;&nbsp;&nbsp For this analysis, we would use the **Total Render Data** data frame. To extract information regarding the efficiency of task scheduling, we would focus on the **Timestamp** column of the data frame. The data that we would work on is the subset of the **Durations** data frame in which we only interested on the _**START**_ timestamp of the task and the _**STOP**_ timestamp of the task. The inefficiency would be measured by the amount of idle time between tasks. For this analysis we would assess each hostname separately and we would record the total idle time for each hostname. The result of this analysis would be in the form of Inefficiency data found below.  
+  
+```{r, echo=FALSE}
+knitr::kable(inefficiencyData)
+```
+&nbsp;&nbsp;&nbsp; 
+
 
 

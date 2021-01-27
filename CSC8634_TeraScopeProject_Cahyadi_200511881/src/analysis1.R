@@ -124,6 +124,63 @@ diag(var(eventNamesData[,c(7,10:13,16:18)]))
 # It seems that the data is highly variated and it is reflected by their variance
 summary(eventNamesData[,c(7,10:13,16:18)])
 
+# Check whether there is variation of computational requirement for different level of zoom
 
-# Test GGpairs with boxplot
-ggplot(eventNamesData, aes(x = duration, y = AvgGPUUtilPerc, group = eventName, fill = eventName)) + geom_boxplot()
+# Extract only data points that are rendered on level 4
+level4Data = subset(totalRenderData, level == 4)
+# Extract only data points that are rendered on level 8
+level8Data = subset(totalRenderData, level ==8)
+# Extract only data points that are rendered on level 12
+level12Data = subset(totalRenderData, level ==12)
+
+# Since there is only 1 image tile which is rendered at level 4 zoom, therefore 
+# for the level 4 zoom level we could only use this data point as reference
+
+# We would combine the 3 level as 1 data using row bind
+firstTileLeveledData = rbind(level4Data[,c(7,9:16)], 
+                           subset(level8Data, x == 0 & y == 0)[,c(7,9:16)], 
+                           subset(level12Data,x == 0 & y == 0)[,c(7,9:16)])
+
+# Subset image tile that are both present in the level 8 zoom and level 12 zoom
+level12and8 = subset(level12Data, x <=15 & y <= 15)
+
+# Extract only the average time for each 
+level8GPUAvg = colMeans(level8Data[,c(7,10:13,16)])
+level12and8GPUAvg = colMeans(level12and8[,c(7,10:13,16)])
+comparison12and8 = rbind(level8GPUAvg,level12and8GPUAvg)
+comparison12and8 = as.data.frame(comparison12and8)
+
+# Based on this data frame, the level seems affecting the performance of the GPU
+# the more the image is zoomed out the more computational power it required
+
+
+# Finding the inefficiency of task scheduling within each host
+# Subset the Total Render from the Application Checkpoints Duration data frame
+totalRenderDuration = subset(Durations, eventName == "TotalRender")
+
+# Extract the hostname list
+hostnameList = unique(totalRenderDuration$hostname)
+totalIdleTime = vector()
+for(host in hostnameList){
+  
+  totalRenderDurationHost = subset(totalRenderDuration,hostname == host)
+  # Order the data frame
+  totalRenderDurationHost = totalRenderDurationHost[order(totalRenderDurationHost$START),]
+  timeLoss = 0 
+  
+  for(r in 1:(nrow(totalRenderDurationHost)-1)){
+  
+    gap = 0
+    gap = as.duration(totalRenderDurationHost$START[r+1] - totalRenderDurationHost$STOP[r])
+    timeLoss = timeLoss + gap
+  
+  }
+totalIdleTime = append(totalIdleTime,timeLoss)
+}
+
+# Create a new data frame to show the inefficiencies for each hostname
+inefficiencyData = data.frame(
+  Hostname = hostnameList, TimeLoss = totalIdleTime )
+
+# Cache the data frame 
+cache('inefficiencyData')
