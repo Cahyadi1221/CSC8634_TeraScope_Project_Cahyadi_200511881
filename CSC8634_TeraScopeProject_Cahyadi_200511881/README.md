@@ -1,39 +1,21 @@
 # CSC8634_TeraScopeProject_Cahyadi_200511881
 
-Welcome to ProjectTemplate!
+Welcome to **Performance Evaluation Of Terapixel Rendering in Cloud(Super) Computing Project**!
 
-This file introduces you to ProjectTemplate, but you should eventually replace
-the contents of this file with an introduction to your project. People who
-work with your data in the future will thank you for it, including your future
-self.
+# Abstract
+<details> <summary>...</summary>_**Context**_</details>  
+&nbsp;&nbsp;&nbsp; As the demand and implementation of cloud technologies increased, subsequently there is an increase of interest in finding information for improving its efficiency through Performance evaluation. This project would extract such performance evaluation out of cloud architecture meant to produce Terapixel image of 3D city visualisation of Newcastle Upon Tyne.  
+<details><summary>...</summary>_**Objective**_</details>  
+&nbsp;&nbsp;&nbsp; The goal of this project is that performance evaluation should be able to pin point the area in which an optimisation should be focused on, and extract necessary performance information out of the current hardware and services utilised in the current cloud architecture.   
+<details><summary>...</summary>_**Method**_</details>  
+&nbsp;&nbsp;&nbsp; To achieve such goal, a data mining process would be conducted following a CRISP-DM best practice method. The main program in which the data mining process is done is Rstudio and further streamlined by using the Project Template package.  
+<details><summary>...</summary>_**Results**_</details>  
+&nbsp;&nbsp;&nbsp; Implementing these data mining process into the data we can extract the hardware performance information regarding on its capabilities to render an image tile. And the results of these analyses can provide answers to the questions necessary for evaluating the   performance of the current cloud-architecture  
+<details><summary>...</summary>_**Novelty**_</details>  
+&nbsp;&nbsp;&nbsp; This project is done entirely using the CRISP-DM methodology and focuses on creating an EDA on the data set in which, the results of this project serve as a foundation for future projects on the cloud-architecture meant to produce terapixel 3D City visualisation of Newcastle Upon Tyne.  
 
-ProjectTemplate is an R package that helps you organize your statistical
-analysis projects. Since you're reading this file, we'll assume that you've
-already called `create.project()` to set up this project and all of its
-contents.
+<img src= "complete_eventNamesPairsData.jpeg"/> 
 
-To load your new project, you'll first need to `setwd()` into the directory
-where this README file is located. Then you need to run the following two
-lines of R code:
+# Project Template Description 
 
-	library('ProjectTemplate')
-	load.project()
-
-After you enter the second line of code, you'll see a series of automated
-messages as ProjectTemplate goes about doing its work. This work involves:
-* Reading in the global configuration file contained in `config`.
-* Loading any R packages you listed in the configuration file.
-* Reading in any datasets stored in `data` or `cache`.
-* Preprocessing your data using the files in the `munge` directory.
-
-Once that's done, you can execute any code you'd like. For every analysis
-you create, we'd recommend putting a separate file in the `src` directory.
-If the files start with the two lines mentioned above:
-
-	library('ProjectTemplate')
-	load.project()
-
-You'll have access to all of your data, already fully preprocessed, and
-all of the libraries you want to use.
-
-For more details about ProjectTemplate, see http://projecttemplate.net
+&nbsp;&nbsp;&nbsp; Since this project follows 
