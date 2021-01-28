@@ -1,8 +1,6 @@
 # Analysis Script
-library(dplyr)
 library(ProjectTemplate)
 library(lubridate)
-library(ggplot2)
 library(GGally)
 library(knitr)
 load.project()
@@ -140,15 +138,18 @@ level12Data = subset(totalRenderData, level ==12)
 firstTileLeveledData = rbind(level4Data[,c(7,9:16)], 
                            subset(level8Data, x == 0 & y == 0)[,c(7,9:16)], 
                            subset(level12Data,x == 0 & y == 0)[,c(7,9:16)])
+cache('firstTileLeveledData')
+
 
 # Subset image tile that are both present in the level 8 zoom and level 12 zoom
 level12and8 = subset(level12Data, x <=15 & y <= 15)
 
 # Extract only the average time for each 
-level8GPUAvg = colMeans(level8Data[,c(7,10:13,16)])
-level12and8GPUAvg = colMeans(level12and8[,c(7,10:13,16)])
-comparison12and8 = rbind(level8GPUAvg,level12and8GPUAvg)
+level8 = colMeans(level8Data[,c(7,10:13,16)])
+level12 = colMeans(level12and8[,c(7,10:13,16)])
+comparison12and8 = rbind(level8,level12)
 comparison12and8 = as.data.frame(comparison12and8)
+cache('comparison12and8')
 
 # Based on this data frame, the level seems affecting the performance of the GPU
 # the more the image is zoomed out the more computational power it required
@@ -160,14 +161,15 @@ totalRenderDuration = subset(Durations, eventName == "TotalRender")
 
 # Extract the hostname list
 hostnameList = unique(totalRenderDuration$hostname)
+lengthOfRecording = vector()
 totalIdleTime = vector()
+# 
 for(host in hostnameList){
   
   totalRenderDurationHost = subset(totalRenderDuration,hostname == host)
   # Order the data frame
   totalRenderDurationHost = totalRenderDurationHost[order(totalRenderDurationHost$START),]
   timeLoss = 0 
-  
   for(r in 1:(nrow(totalRenderDurationHost)-1)){
   
     gap = 0
@@ -175,12 +177,17 @@ for(host in hostnameList){
     timeLoss = timeLoss + gap
   
   }
-totalIdleTime = append(totalIdleTime,timeLoss)
+# Calculate the timelapse of the recording from the first task until the last task
+# that are recorded
+  timelapsed = totalRenderDurationHost$STOP[nrow(totalRenderDurationHost)] - totalRenderDurationHost$START[1]
+  lengthOfRecording = append(lengthOfRecording, timelapsed)
+  totalIdleTime = append(totalIdleTime,timeLoss)
 }
-
 # Create a new data frame to show the inefficiencies for each hostname
 inefficiencyData = data.frame(
-  Hostname = hostnameList, TimeLoss = totalIdleTime )
+  Hostname = hostnameList, TimeLoss = totalIdleTime,RecordedLength = lengthOfRecording )
 
 # Cache the data frame 
 cache('inefficiencyData')
+
+

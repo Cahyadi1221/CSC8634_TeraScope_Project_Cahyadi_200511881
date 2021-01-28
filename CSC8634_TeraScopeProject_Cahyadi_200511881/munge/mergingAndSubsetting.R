@@ -1,4 +1,5 @@
-# Create a vertical data in event name is considered a column
+# Wrangling and Merging the three dataframes which are Application Checkpoints Data,
+# GPU data, and task.x.y data.
 
 # To Avoid any duplicates within the data, run the unique function on each data
 # Save the data into another variable
@@ -278,6 +279,9 @@ for (hostf in hostnameListF){
     gpudataTilingInt = subset(tempHostnameGPUFunction,timestamp_H_M_S >= tasklistloopStartTiling$timestamp_H_M_S 
                               & timestamp_H_M_S <= tasklistloopStopTiling$timestamp_H_M_S)
     
+    # Similar to the case on Saving Config since the duration of this data is less 
+    # than 2 seconds, therefore apply conditional to extract the average GPU condition
+    # of the two closest timestamp 
     if(nrow(gpudataTilingInt) == 0){
       # Set the lower limit Data
       gpudataTilingLow = subset(tempHostnameGPUFunction, timestamp_H_M_S <= eventStart)
@@ -434,13 +438,15 @@ for (hostf in hostnameListF){
   
   # End of the Hostname Loop
 }
-
+# Save the final value of the wrangling and merging process between the Application
+# Checkpoints and the GPU into a new variable
 verticalData_Raw = finalData_3
-cache('verticalData_Raw')
-
 # Merge the newly made data set with the task x y data
 verticalData_merged_Raw = merge(verticalData_Raw, task.x.y, by = c("taskId", "jobId"))
+# Cache the data for easier reproducibility
 cache('verticalData_merged_Raw')
+
+# Subsetting the data by Event Name
 
 # Separate the Total Render which constitute the whole task length into an individual data set
 totalRenderData = subset(eventNamesData, eventName == "TotalRender")
@@ -451,7 +457,7 @@ totalRenderData[,"gpuSerial"] = as.character(totalRenderData[,"gpuSerial"])
 
 cache('totalRenderData')
 
-# Create a version of the vertical data in which does not include the Total Render
+# Create a version of the wrangled data in which does not include the Total Render
 # event name since it basically cover the entire task length. Also, create a new 
 # features which are the gpuSerialFeature(turning the gpuSerial as a numerical factor )
 # and the eventNameFeature(turning the event name as a numerical factor)

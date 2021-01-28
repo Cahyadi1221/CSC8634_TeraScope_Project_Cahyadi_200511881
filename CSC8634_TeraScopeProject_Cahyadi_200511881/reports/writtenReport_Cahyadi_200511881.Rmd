@@ -31,7 +31,7 @@ knitr::opts_chunk$set(fig.align = "center")
   * Are there any particular GPU cards (based on their serial number) that is distinct from the other in terms of performance
   * Are there any inefficiencies detected for the task scheduling process
 
-&nbsp;&nbsp;&nbsp; To help achieving the goals mentioned above, this data mining project would be done using the best practice CRISP-DM methodology, and would be done entirely on R environment supported by the Project Template package and git version control to further streamline the data mining process. 
+&nbsp;&nbsp;&nbsp; To help achieving the goals and answer the questions mentioned above, this data mining project would be done using the best practice CRISP-DM methodology, and would be done entirely on R environment supported by the Project Template package and git version control to further streamline the data mining process. 
   
 ```{r include = FALSE}
 library(ProjectTemplate)
@@ -45,7 +45,7 @@ source("src/analysis1.R")
   
 ## **Data understanding**
 
-&nbsp;&nbsp;&nbsp; There are three data frames available in which the data mining process could be implemented. These data frames are extracted from the application checkpoint and system metric output from the production of terapixel image. Each data frames are in the comma-separated value format in which it could be loaded directly into R by placing the data frames into the data folder of the Project Template, and loading the project. The three data frames mentioned consist of Application Checkpoint data, GPU data, and Task X Y data. Before any process could be made, an initial data exploration would be done on these data frames. 
+&nbsp;&nbsp;&nbsp; There are three data frames available in which the data mining process could be implemented. These data frames are extracted from the application checkpoint and system metric output from the production of terapixel image. Each data frames are in the comma-separated value format in which it could be loaded directly into R by placing the data frames into the data folder of the Project Template, and loading the project. The three data frames mentioned consist of **Application Checkpoint** data, **GPU** data, and **Task-X-Y** data. Before any process could be made, an initial data exploration would be done on these data frames. 
   
 ### _**Application Checkpoints Data**_  
 
@@ -169,17 +169,13 @@ print(head(horizontalDurations), options(tibble.width = Inf ))
   
 ### _**Merging Application Checkpoints Data with GPU Data**_
   
-&nbsp;&nbsp;&nbsp; To extract necessary information out of the GPU data, the GPU data needs to be merged with the Application Checkpoints data to gather detailed information regarding the tasks or event tasks that are being run on the GPU nodes at a current point of time. The merged should be by **Hostname** and **Timestamp** columns, however the merge for the **Timestamp** column should not be done so directly, since the **Timestamp** of the GPU data only record the GPU condition every 2 seconds, and if we merged it directly, it would only bear 232 matching results. To tackle this problem, the GPU condition for a particular task is calculated by the average GPU condition during the length of the task itself. An example for this calculation if _**Total Render**_ event started at _**8H 1M 29.305S**_ and ended at _**8H 0M 44.142S**_ we would apply a conditional that would extract all the GPU conditions recorded within this time frame, and for this particular event, we would use the average GPU condition between the two timestamps above to be recorded as the GPU condition of the particular event. With this conditional we are successful on creating the desired data. The data frame that are created are based on the horizontal data, and would bear 40 columns. Since not all the columns would be visible if shown here, below is only a preview of the first view columns of the data that are part of the _**Total Render**_ event name.
+&nbsp;&nbsp;&nbsp; To extract necessary information out of the GPU data, the GPU data needs to be merged with the Application Checkpoints data to gather detailed information regarding the tasks or event tasks that are being run on the GPU nodes at a current point of time. The merged should be by **Hostname** and **Timestamp** columns, however the merge for the **Timestamp** column should not be done so directly, since the **Timestamp** of the GPU data only record the GPU condition every 2 seconds, and if we merged it directly, it would only bear 232 matching results. To tackle this problem, the GPU condition for a particular task is calculated by the average GPU condition during the length of the task itself. An example for this calculation if _**Total Render**_ event started at _**8H 1M 29.305S**_ and ended at _**8H 0M 44.142S**_ we would apply a conditional that would extract all the GPU conditions recorded within this time frame, and for this particular event, we would use the average GPU condition between the two timestamps above to be recorded as the GPU condition of the particular event. However, this conditional too return some problem in the form of **Event Name** which lasted less than 2 seconds. Only using the first conditional would return _**NaN**_ value for the GPU conditions for these events. Therefore we would subject another conditional if the average GPU conditions return a _**NaN**_ value, we would take the two closest timestamp to **START** and **STOP** column of the event of the same hostname on the GPU data. For example, a _**Saving Config**_ event happen between _**7H 41M 45.459S**_ and _**7H 41M 45.461S**_ and there are no GPU condition that are recorded between those two timestamps for the particular hostname. Therefore, we would take the GPU condition of the same host that is closest to the **START** of the event, which is _**07H 43M 42.443S**_ and another which is closest to the **STOP** of the event at _**07H 43M 44.452S**_ and we would take the average GPU condition of these two time stamps and recorded it as the GPU condition of the corresponding _**Saving Config**_ event.   
 #### _Data Preview_
-```{r, echo = FALSE}
-head(finalData[,1:12])
-```
-
-&nbsp;&nbsp;&nbsp; However, after carefully assessing the data, it is found that there is some problem detected on the wrangled data. Since the GPU data **Timestamp** only record the timestamp every 2 seconds, an event name that has duration less than 2 seconds, would return a _**NaN**_ or not a number value. To mitigate this problem, for the GPU conditions that returns _**NaN**_ value would be subjected to another conditional in which, the GPU conditions for this particular event name is average of GPU conditions of the two closest timestamp on the GPU Data to the START and STOP timestamp of this particular event. For example, a _**Saving Config**_ event happen between _**7H 56M 50.424S**_ and _**7H 56M 50.426S**_ and there are no GPU condition that are recorded between that time for the particular hostname. Therefore, we would take the GPU condition of the particular hostname with the timestamp that is earlier than but is the closest to _**7H 56M 50.424S**_ and the one which is latter but closest to _**7H 56M 50.426S**_ and we would take the average between these two closest timestamps and record it as the GPU condition of the corresponding _**Saving Config**_ event. There are both data that has been wrangled horizontally with each event name with its each corresponding features as columns and data that is wrangled vertically meaning that the event names are still contained within the **Event Name** column. But for the preview below, we choose to preview the data that is wrangled vertically so that it is more compact in width. 
 ```{r, echo = FALSE}
 head(verticalData_Raw)
 ```
   
+    
 ### _**Merging the Merged Data Frame with Task-X-Y Data**_ 
   
 &nbsp;&nbsp;&nbsp; Merging the merged GPU and Application Checkpoints data frame with the Task-X-Y data frame is done by specifying the merge by **Task Id** and **Job Id** columns. For the Horizontal data, the merge would bear 65793 rows while for the vertical data the merge would bear 328965 rows.  
@@ -188,14 +184,14 @@ head(verticalData_Raw)
   
 &nbsp;&nbsp;&nbsp; To streamlined the analyses, the main data would also be subset in terms of its event name and **GPU Serial** column values are extracted as a feature to be recorded into a new column **GPU Serial Feature**. The subset would produce these data frames 
 
-  * totalRenderData = A data frame that contains only event name _**Total Render**_.  
+  * totalRenderData = A data frame that contains only event name _**Total Render**_.
   * eventNamesData = A data frame that contains all event names apart from _**Total Render**_ . In this data frame, the **Event Name** column is also extracted as feature, creating a new feature **Event Name Feature** in which, the event name is turned into a factor, and turned into numerical class for analyses.
   * savingConfigData = A data frame that contains only event name _**Saving Config**_
   * renderData =  A data frame that contains only event name _**Render**_
   * tilingData = A data frame that contains only event name _**Tiling**_
   * uploadingData = A data frame that contains only event name _**Uploading**_
 
-&nbps;&nbsp;&nbsp; These data subsets are created in order for separate analyses for different event name could be executed. 
+&nbsp;&nbsp;&nbsp; These data subsets are created in order for separate analyses for different event name could be executed. 
   
   
 ## **Data Analyses and Modelling**
@@ -204,18 +200,18 @@ head(verticalData_Raw)
   
 ### _**Numerical Summaries of the Data**_
   
-&nbsp;&nbsp;&nbsp Extracting the numerical summaries out of the numerical value of the data would bear us
+&nbsp;&nbsp;&nbsp Extracting the numerical summaries out of the GPU condition and duration of the task would bear us
 ```{r, echo = FALSE}
-summary(verticalData_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")])
+summary(verticalData_merged_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")])
 ```
 With variation for each column 
 ```{r, echo=FALSE}
-diag(var(verticalData_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")]))
+diag(var(verticalData_merged_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")]))
 ```
 &nbsp;&nbsp;&nbsp; Based on the numerical summaries extracted from the data as shown above, it seems that out of the numerical columns on the data, the column or feature that has the most variation belong to the **Percent Utilisation of GPU Cores**. The **GPU Temperature** seems to have a really low variation. This information might be used to answer the questions stated on the Business Objective of the report in regards to the GPU Temperature.   
   
 ### _**Graphical Summaries of the Data**_
-```{r, echo = FALSE}
+```{r ,echo= FALSE, fig.height=6, fig.width=6}
 
 include_graphics("C:/image/complete_eventNamesPairsData.jpeg")
 ```
@@ -276,7 +272,7 @@ ggplot(totalRenderData, aes(x = duration, y = AvgPowerDrawWatt)) + geom_hex() + 
 &nbsp&nbsp&nbsp; Looking at the graph above, there is a slight positive correlation trend is detected between the two variables. However, based on this graph alone, there is no clear indication that increased power draw resulted in longer duration or the other way around. Therefore to better understand the correlation between the two variables, a correlation matrix is produced.
 ```{r, echo=FALSE}
 
-cor(totalRenderData[,c(7,10)])
+knitr::kable(cor(totalRenderData[,c(7,10)]))
 
 ```
 &nbsp;&nbsp;&nbsp; The correlation matrix shows that there is some correlation between the **GPU Power Draw** and the **Duration** of the render task, however the correlation is not strong, therefore it could be deducted that the **Duration** of an event task does not influence the **Power Draw** or the other way around. Therefore, it prompt a question on what truly drives the increase in **Power Draw** or what caused the render task to run longer. In an attempt to answer these, we would like to perform analysis on the image tile itself (X and Y coordinate) in regards to its rendering time and the variation of the computational requirements for a certain tile.   
@@ -311,8 +307,17 @@ p8 = ggplot(totalRenderData, aes(x = AvgGPUMemUtilPerc, y = y)) + geom_hex()
 grid.arrange(p7,p8,ncol=2,top = textGrob("Tile Coordinates and Its GPU Memory Utilisation(%)",gp=gpar(fontsize=20,font=3)))
 
 ```
-&nbsp;&nbsp;&nbsp; Based on the GPU conditions graph in regards to Image tile coordinate above, there is no clear correlation that could be drawn between the position of image tile being rendered and the increase of computational requirement. However, there is one more feature that we could explore, which is the level of render which contributes to the level of zoom of the image.
+&nbsp;&nbsp;&nbsp; Based on the GPU conditions graph in regards to Image tile coordinate above, there is no clear correlation that could be drawn between the position of image tile being rendered and the increase of computational requirement. However, there is one more feature that we could explore, which is the level of render which contributes to the level of zoom of the image.  
+&nbsp;&nbsp;&nbsp; The **level** feature is part of the **Task-X-Y** in which it is provided with the image tile coordinates. However upon closer observation on the data, only **1** image tile coordinate that is being rendered at Zoom Level 4 and only **256** image tile being rendered on Zoom level 8, while all the image tile coordinate are subjected to render at Zoom level 12. Therefore, only tiles available to all Zoom level would be compared. Below are the comparison of the GPU condition of the tile at (0,0) coordinate at different Zoom level.
+```{r, echo=FALSE}
+knitr::kable(firstTileLeveledData)
+```
 
+&nbsp;&nbsp&nbsp; From the table provided above, it seems that increase in zoom level would alleviate the load on the GPU since lower zoom level contributes to a wider area that needs to be covered by the render due to the image being more zoomed out. We would check the comparison of average GPU condition between the 256 image tile that are being rendered on both level 8 and level 12. 
+```{r, echo = FALSE}
+comparison12and8
+```
+&nbsp&nbsp&nbsp; It is further confirmed by the table of comparison between Zoom Level 8 and Zoom Level 12 that the more zoomed out an image is, the more it demands higher performance out of the hardware.
 
 
 ### **Identifying GPU Card whose Performance Differ from Others**
@@ -333,11 +338,33 @@ knitr::kable(means)
 ### **Efficiency of the Task Scheduling**
   
 &nbsp;&nbsp;&nbsp For this analysis, we would use the **Total Render Data** data frame. To extract information regarding the efficiency of task scheduling, we would focus on the **Timestamp** column of the data frame. The data that we would work on is the subset of the **Durations** data frame in which we only interested on the _**START**_ timestamp of the task and the _**STOP**_ timestamp of the task. The inefficiency would be measured by the amount of idle time between tasks. For this analysis we would assess each hostname separately and we would record the total idle time for each hostname. The result of this analysis would be in the form of Inefficiency data found below.  
-  
+
+#### _**Data Preview**_  
 ```{r, echo=FALSE}
-knitr::kable(inefficiencyData)
+knitr::kable(head(inefficiencyData))
 ```
-&nbsp;&nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp; From the table of idle time for each hostname or GPU nodes above, it seems that there is an average of _**`r mean(inefficiencyData$TimeLoss)` Seconds**_ idle time out of _**1 hour and 12 mins**_ average length of time of the GPU condition being recorded. Even though the idle time seems small, if this idle time is times by the number of hour within a day and times by 365 days within a year, this inefficiency in terms of idle time would mean extra loss of money. Therefore the task scheduling efficiency should be improved. One of the way to improve the task scheduling efficiency is to schedule the next rendering task to be done to be run right after the first task has just finished the process.  
+  
+## Conclusion  
+  
+&nbsp;&nbsp;&nbsp;The analyses that have been done above, are meant to answer the questions mentioned on the Business Objective Part of the report. Based, on the results of the analyses, each question has been able to be answered and following are the foundings from the analyses that should be considered in creating future scalability planning for the cloud-architecture for rendering the 3D city Visualisation of Newcastle upon Tyne.  
 
+  * The task run time is dominated by the _**Render**_ event 
+  * There is no implication that there is an interplay between **GPU Temperature** and the **Duration** of the task
+  * There is a slight correlation between the increased power Draw and the increase of Render time
+  * Lower zoom level results in higher computational requirement.
+  * There are 2 GPU cards that are slower than the rest which are GPU cards of serial number _**3.24117e+11**_ and _**3.24317e+11**_ 
+  * And it seems that there are inefficiency in task scheduling in that there are gaps between when the task is finished and another task is started. 
+  
+&nbsp;&nbsp;&nbsp; In regards to the foundings above, a following recommendation could be made. 
 
+  * Opting to switch to the faster type of GPU cards and avoid using GPU cards with serial number of _**3.24117e+11**_ and _**3.24317e+11**_ if possible.
+  * Improve the task scheduling efficiency by programming tasks to run right after prior task has finished.
+
+\newpage 
+
+## Reference
+
+  * Okamoto, Y., Oishi, T. & Ikeuchi, K. Image-Based Network Rendering of Large Meshes for Cloud Computing. Int J Comput Vis 94, 12–22 (2011). https://doi.org/10.1007/s11263-010-0383-1
+  
 
