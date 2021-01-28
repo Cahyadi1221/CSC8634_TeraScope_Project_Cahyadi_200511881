@@ -12,11 +12,17 @@ knitr::opts_chunk$set(fig.align = "center")
 ```
 
 # **Introduction**
+
+## **Background**
 &nbsp;&nbsp;&nbsp;Cloud technology, a relatively new technology that is based on utilising the internet infrastructure to the fullest has seen a major increase in popularity in recent years. This success could be attributed to the huge growth of the Tech Industries that seen many new Unicorns; a term first mentioned by Aileen Lee on 2013, used to describe privately owned start-up companies that valued more than 1 billion USD. One of many reasons why the emergence of these "Unicorns" of Tech world brought popularity to Cloud technologies is that Cloud technologies provide a huge benefit to a start-up companies to further expanse and scale their business with greater flexibility and relatively minimum cost and commitment. Start-up companies now have an option to rent the necessary hardware infastructure instead of investing huge capital on it, since many of the established Tech companies such as Google and Amazon provide access to their extensive range of hardware to be rent. These infrastructures could then be run via virtualisation methods in which provide a great flexibility of scaling.
+&nbsp;&nbsp;&nbsp;Cloud technologies have been utilised in many parts of the modern society, one of them being for rendering high-resolution images. The implementation of the cloud technologies in rendering task, would eliminate the hardware constraint for the client or the user and expedite the rendering process altogether. An example of this implementation could be found in rendering model in "Image-Based Network Rendering of Large Meshes for Cloud Computing" (Okamoto et al. 2010), in which the model created are able to render any image in real time. A similar cloud implementation are also found in scalable cloud architecture tasked to create a terapixel 3D city visualization of Newcastle Upon Tyne. The architecture uses public IaaS cloud GPU nodes to perform this task.  
+&nbsp;&nbsp&nbsp; Typically cloud services provider ascertain that their services are done in regards to their standard, however it is still important that we are able to extract detailed information more suited to our own requirements. A result from a journal "Performance Evaluation of Cloud Computing Offerings" (Stantchev, 2009), provide such cases in which there are more information that could be subtracted from the system in which are more relevant for the stakeholders for scalability planning. It is by these reasons that this data mining project to extract the performance information out of the GPU nodes of the TeraPixel rendering cloud-architecture.  
+
+
+## **Scope**
   
-&nbsp;&nbsp;&nbsp;Cloud technologies have been utilised in many parts of the modern society, one of them being for rendering high-resolution images. The implementation of the cloud technologies in rendering task, would eliminate the hardware constraint for the client or the user. An example of this implementation could be found in rendering model in "Image-Based Network Rendering of Large Meshes for Cloud Computing" (Okamoto et al. 2010). This report would evaluate the performance of GPU nodes in a scalable cloud architecture that are used to produce a Terapixel 3D City visualization of Newcastle Upon Tyne.
-  
-&nbsp;&nbsp;&nbsp;To gain the information adaquate to create an evaluation on the performance of the GPU nodes capabilities to render the terapixel visualizations, a data mining process following a CRISP-DM best data mining practice would be conducted. The tools that would be used to carry out the data mining process are Rstudio combined with the Project Template package to streamlined the data mining process. 
+&nbsp;&nbsp;&nbsp;This main aspect of this project is extracting performance information out of an existing cloud-architecture that is meant to create a 3D City visualisation of Newcastle Upon Tyne. The information is extracted by the means of data mining that follows a CRISP-DM best practice steps. Based on the results of the analyses done in this project, a conclusion shall be made at the end of the project.    
+&nbsp;&nbsp;&nbsp;The tools that would be used for this project consist of Rstudio as the main program, supported by Project Template package to further streamline the data mining process.    
   
   
 # **CRISP-DM Methodology**
@@ -30,8 +36,7 @@ knitr::opts_chunk$set(fig.align = "center")
     - Quantify the variation in computation requirements for particular tile
   * Are there any particular GPU cards (based on their serial number) that is distinct from the other in terms of performance
   * Are there any inefficiencies detected for the task scheduling process
-
-&nbsp;&nbsp;&nbsp; To help achieving the goals and answer the questions mentioned above, this data mining project would be done using the best practice CRISP-DM methodology, and would be done entirely on R environment supported by the Project Template package and git version control to further streamline the data mining process. 
+ 
   
 ```{r include = FALSE}
 library(ProjectTemplate)
@@ -344,9 +349,9 @@ knitr::kable(means)
 knitr::kable(head(inefficiencyData))
 ```
 &nbsp;&nbsp;&nbsp; From the table of idle time for each hostname or GPU nodes above, it seems that there is an average of _**`r mean(inefficiencyData$TimeLoss)` Seconds**_ idle time out of _**1 hour and 12 mins**_ average length of time of the GPU condition being recorded. Even though the idle time seems small, if this idle time is times by the number of hour within a day and times by 365 days within a year, this inefficiency in terms of idle time would mean extra loss of money. Therefore the task scheduling efficiency should be improved. One of the way to improve the task scheduling efficiency is to schedule the next rendering task to be done to be run right after the first task has just finished the process.  
-  
-## Conclusion  
-  
+
+## **Evaluation**
+
 &nbsp;&nbsp;&nbsp;The analyses that have been done above, are meant to answer the questions mentioned on the Business Objective Part of the report. Based, on the results of the analyses, each question has been able to be answered and following are the foundings from the analyses that should be considered in creating future scalability planning for the cloud-architecture for rendering the 3D city Visualisation of Newcastle upon Tyne.  
 
   * The task run time is dominated by the _**Render**_ event 
@@ -360,11 +365,21 @@ knitr::kable(head(inefficiencyData))
 
   * Opting to switch to the faster type of GPU cards and avoid using GPU cards with serial number of _**3.24117e+11**_ and _**3.24317e+11**_ if possible.
   * Improve the task scheduling efficiency by programming tasks to run right after prior task has finished.
+  
+# Conclusion 
+
+&nbsp;&nbsp;&nbsp; Based on the results found from data mining using the CRISP-DM methodology, the project could be seen as a moderately successful project. Since this project is mainly an Exploratory Data Analysis on the performance data of the GPU nodes used to produce a terapixel image, therefore the metric in which the success of the project is determined is the ability of the data mining process to extract useful information, and the data mining process in this project are able to fulfilled that requirement by successfully answering all the questions mentioned on the earlier part of this project. The advantage of using this evaluation metric to measure the success of an EDA data mining project is that it was able to bottleneck the goal and objective of the data mining process to answer the questions stated on the earlier part of the project. The downside however, that it focuses only to answer the questions mentioned on the earlier part of the project that it might left out other interesting traits that are not related to the questions. 
+
+# Future Works
+  
+&nbsp;&nbsp;&nbsp; Future work on this area   
+
 
 \newpage 
 
 ## Reference
 
   * Okamoto, Y., Oishi, T. & Ikeuchi, K. Image-Based Network Rendering of Large Meshes for Cloud Computing. Int J Comput Vis 94, 12–22 (2011). https://doi.org/10.1007/s11263-010-0383-1
+  *V. Stantchev, "Performance Evaluation of Cloud Computing Offerings," 2009 Third International Conference on Advanced Engineering Computing and Applications in Sciences, Sliema, 2009, pp. 187-192, doi: 10.1109/ADVCOMP.2009.36.
   
 
