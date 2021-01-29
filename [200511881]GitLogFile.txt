@@ -1,0 +1,277 @@
+commit 75dad3b39311e756d86d30a08a1cf30983c8c740
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 00:58:00 2021 +0000
+
+    Edit the readme of munge folder and add hyperlink for the CSC8634 main project folder readme
+
+commit c7b417269a3e3f77f477b2c8438041919b3df61c
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 00:46:03 2021 +0000
+
+    Edit some in text citation on the written report, and edit the hyperlink for markdown
+
+commit 5dcb65089ac0f9b6c2926fb419d22647a46fbf21
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 00:30:50 2021 +0000
+
+    Update the hyperlink on the main directory readme and remove unnecessary files
+
+commit ed6e28cc823d6eda09a61b483fdca771538e69a2
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 00:24:32 2021 +0000
+
+    Edit the Readme to include guide to reproduce the analyses, and remove some error in the wrtitten report (nbsps)
+
+commit e148b2af5565ea306a673e63e385ac1470e6e4ee
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 22:54:36 2021 +0000
+
+    Edit the link in readme files
+
+commit 95c39f90858a844fb6de7fa5ffe43c26bdc754a4
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 22:50:04 2021 +0000
+
+    Remove unnecessary analysis file and update both readme files on main directory and project folder
+
+commit cdab5b9abc01945837e031b23f6180647b501d36
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 22:26:02 2021 +0000
+
+    Updating the readme file of the main directory
+
+commit bfac2ce6bd46d972778ff721445780e24fb77eb4
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 22:24:01 2021 +0000
+
+    Updating the readme file of the main directory
+
+commit bf40c068bd21b1332afc6885719d8b2a64c80635
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 22:22:16 2021 +0000
+
+    Moving image to the main directory
+
+commit 7260ca20dd91174918c3cbea539e0b1e45157031
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 22:20:09 2021 +0000
+
+    Finishing the written report and structured abstract, and editing readme files
+
+commit bef244b929fee3112ffd08d5b1c8b7e77f6fe4d0
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 17:49:58 2021 +0000
+
+    Testing the spoiler function of markdown, updating the written report, and updating readme files
+
+commit e92af40dc9dd00460bde6b25f1d7ed10d0ae28f8
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 28 02:38:32 2021 +0000
+
+    Caching new data frame for analyses, deleting unnecessary munge files, finishing the report
+
+commit b2678819b8a5e1f5bf6aabddfa55a04ef6aa4f62
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Wed Jan 27 21:03:59 2021 +0000
+
+    Finishing the Analysis, finding inefficiencies in task scheduling, and finding variation of computational requirement of certain image tile, in regards to its level
+
+commit fac56e8afc6a9ededf2540e30d6ba1675b93af0c
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Wed Jan 27 03:43:43 2021 +0000
+
+    Update the report by adding some discussion to answer questions stated on the Business Objective
+
+commit bb9030fc3bb8d567f9705fd20d14f08e0d45de37
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Tue Jan 26 15:26:25 2021 +0000
+
+    Create horizontal dataframe for duration using dplyr pivot_wider to increase the efficiency
+
+commit 0f668eea4566380907ff77dac69e5d36d101d189
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Tue Jan 26 03:53:04 2021 +0000
+
+    remove unnecessary files
+
+commit a7ee5a8ddfaf3494cd03030f0cb5b18df0a493d5
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Tue Jan 26 03:50:04 2021 +0000
+
+    Updating the Rmarkdown File, and creating a test project to test the knit function, since the knit function was facing some error beforehand
+
+commit e716215952d65ce404a00962997eb6dbf67132ee
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Mon Jan 25 20:52:42 2021 +0000
+
+    Caching the newly created wrangled application checkpoints data(dplyr). And updating the report template
+
+commit abd1ec6c18431ef0095a67e284d4f800e8c90036
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Mon Jan 25 01:06:19 2021 +0000
+
+    Checking the updated knit report
+
+commit dfbbaf99e4131b27549e95e59e36bb08f4785eea
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Mon Jan 25 00:47:22 2021 +0000
+
+    Testing some ggplot and updating the Report
+
+commit d2870c34db0fc3f767f439c68dc095df44b74bdb
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Jan 24 01:31:50 2021 +0000
+
+    Updating the munge file, separating event names into separate data set, adding new features which are Event name as factor and GPU serial as factor
+
+commit 1dd6734ef0c1b5843e1966d0b51e8b3ebb1f1d33
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Jan 24 01:29:34 2021 +0000
+
+    Changing the pair plots of the total render event name
+
+commit e3280c48e7938435ac9767a3b609c5b7cd1bf1d9
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sat Jan 23 18:59:16 2021 +0000
+
+    Remove the library in the munge file
+
+commit ec20695ca84b9c0b3fffc829b5ce3070f84f5264
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sat Jan 23 00:32:42 2021 +0000
+
+    Set up a rmarkdown for the report as well as testing some ggpairs function
+
+commit fea8ca20f9f5fac5504ce3677bb8c6379c3fb85a
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 22 18:46:47 2021 +0000
+
+    Delete Unneccesarry cache
+
+commit 70ed8ad8ca9b8e3d71c8750234ada034b5afc1fd
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 22 18:33:56 2021 +0000
+
+    Merge the wrangled combination of Application Checkpoint and GPU data with the task x.y data
+
+commit bb2f5fd73158c0cb17d0f620b717a5c4d075ab0a
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 22 02:37:21 2021 +0000
+
+    Added title to pairs plot
+
+commit 72019909b5d16fb86c4c0aed6d6fe471d328c420
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 21:14:32 2021 +0000
+
+    Applying ColMeans function to the subset data frames
+
+commit 81ac9d08f2cf9360e80b8664da5934c3ec6a22e5
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 20:21:22 2021 +0000
+
+    Subset the data back to each event name and extract the correlation matrix from each data subset
+
+commit 40580e5372f5836aea8a67ad3debc8366b9d921d
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 20:00:23 2021 +0000
+
+    Trim some unnecessary variables
+
+commit 56a933e15e656ad079cb3bdf5df96065e8c96e09
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 17:22:44 2021 +0000
+
+    Wrangle the application checkpoint and gpu data vertically, integrating event name as a variable
+
+commit cf47e971c6eed816df781d4ef42547117f0dca72
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 01:31:53 2021 +0000
+
+    Correct the variable name for the pairs function
+
+commit 6b65c879c213118ea1e6cff242c1bbe51b7ea75e
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 01:30:50 2021 +0000
+
+    Use the pairs function to check for any trend
+
+commit 3b5f31e9afce3428a57828693c57d6a6e475a715
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 00:34:44 2021 +0000
+
+    Merge the wrangled data with the task.x.y data
+
+commit 8413ab4455dad6449fddb9da33fd24c8f08dfc48
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Thu Jan 21 00:05:53 2021 +0000
+
+    Create a second wrangling data, to deal with the missing values of some event names
+
+commit 64a603277da3de9f6b0ba53b7c5cf2cb68efaec1
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Wed Jan 20 00:35:46 2021 +0000
+
+    1. Pre-Process (wrangle the raw Data)
+    2. Save the result of the wrangling in cache
+    3. Set the munging to FALSE so that user that are looking to reproduce the data doesn't need to wait long for the wrangling process to be done
+
+commit 82e6e29dd58ba94de9f7f474d40a0a904e7ecafe
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Dec 27 23:07:46 2020 +0000
+
+    Create the analysis script on the src folder
+
+commit c256a6e4a105c0b681a93fe7fd9db4d48a169cc1
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Dec 27 23:00:48 2020 +0000
+
+    Run load Project to create cache of the data
+
+commit 3cf1b661f5a655c538c5d0970190b38fbb510670
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Dec 27 22:43:49 2020 +0000
+
+    Edit the global.dcf file in the config folder that enables library loading
+
+commit 4bd432981fd787603fa75f4a129f67b577ee2e38
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Dec 27 22:40:46 2020 +0000
+
+    Edit the readme for the munge files folder
+
+commit 4099e4db916fd58d7bbe80f90281cfcc5704407d
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Dec 27 22:26:26 2020 +0000
+
+    Edit the readme
+
+commit 9dfd62dcc1d05b2c3b94672d75011398dd68c936
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Sun Dec 27 22:24:55 2020 +0000
+
+    Edit the readme files of the data folder
+
+commit 681a88257c61f0460c7d80f4a8d6ca6ea1805bfc
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Tue Dec 22 23:58:54 2020 +0000
+
+    Change the file type for task-x-y file from xlsx into csv
+
+commit 1322b2ac7edb705244fbf1621a2627f09c8d2c48
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Tue Dec 22 23:54:12 2020 +0000
+
+    Adding the raw data and installing git lfs
+
+commit a7374c8715e385c68a42d484e44fa84b3d35f51c
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Tue Dec 22 23:49:53 2020 +0000
+
+    Initialise Project Template
+
+commit 3dc83c91d1f43a16f92a26c0dc775c0100e125ce
+Author: cahyadi0511881 <74244211+cahyadi0511881@users.noreply.github.com>
+Date:   Tue Dec 22 23:46:49 2020 +0000
+
+    Initial commit
