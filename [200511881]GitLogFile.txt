@@ -1,3 +1,15 @@
+commit 030b74c68f79b83319bc109931fab1349932a4a0
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 13:19:27 2021 +0000
+
+    Fix the writing error in the report
+
+commit 05dcf18645c906e9ca77550b90682c4719e3743e
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 01:01:09 2021 +0000
+
+    Add Git Log File
+
 commit 75dad3b39311e756d86d30a08a1cf30983c8c740
 Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
 Date:   Fri Jan 29 00:58:00 2021 +0000
