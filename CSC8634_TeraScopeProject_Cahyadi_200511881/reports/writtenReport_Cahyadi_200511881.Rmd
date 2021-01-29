@@ -22,7 +22,7 @@ knitr::opts_chunk$set(fig.align = "center")
 ## **Scope**
   
 &nbsp;&nbsp;&nbsp;The main aspect of this project is extracting performance information out of an existing cloud-architecture that is meant to create a 3D City visualisation of Newcastle Upon Tyne. The information is extracted by the means of data mining that follows a CRISP-DM best practice steps and would focus entirely on the exploratory data analysis. Based on the results of the analyses done in this project, a conclusion shall be made at the end of the project.    
-&nbsp;&nbsp;&nbsp;The tools that would be used for this project consist of Rstudio as the main program, supported by Project Template package to further streamline the data mining process.    
+&nbsp;&nbsp;&nbsp;The tools that would be used for this project consist of Rstudio as the main program, supported by Project Template package, and git version control to further streamline the data mining process.    
   
   
 # **CRISP-DM Methodology**
@@ -378,7 +378,7 @@ knitr::kable(head(inefficiencyData))
 
 # Personal Reflections
   
-&nbsp;&nbsp;&nbsp; Undertaking this project has increased my familiarity of using CRISP-DM best data mining practice methodology,and using the CRISP-DM methodology along with Project Template package has truly helped in streamlining the whole data mining process. Throughout the project, the most difficult process to be executed perfectly is the data wrangling process in which we need to redo the wrangling process until an appropriate data frame is produced. The amount of data that is being wrangled is also a driving factor that caused the lengthy wrangling process. Apart from the wrangling process, the rest of the processes done in this project are quite straight forward as a result of using the CRISP-DM methodology. Therefore the CRISP-DM methodology combined with the Project Template package of R, would be used for similar project going forward. 
+&nbsp;&nbsp;&nbsp; Undertaking this project has increased my familiarity of using CRISP-DM best data mining practice methodology,and using the CRISP-DM methodology along with Project Template package has truly helped in streamlining the whole data mining process. Throughout the project, the most difficult process to be executed perfectly is the data wrangling process in which we need to redo the wrangling process until an appropriate data frame is produced. The amount of data that is being wrangled is also a driving factor that caused the lengthy wrangling process. Apart from the wrangling process, the rest of the processes done in this project are quite straight forward as a result of using the CRISP-DM methodology. The usage of Project Template has also helped in streamlining the data logistic processes. Last but not least, the usage of Git version control has also helped in creating a framework that enables us to have the flexibility to go back to a certain "commit" version of the program. Therefore the CRISP-DM methodology combined with the Project Template package of R and Git version control, would be used for similar project going forward. 
 
 \newpage 
 
