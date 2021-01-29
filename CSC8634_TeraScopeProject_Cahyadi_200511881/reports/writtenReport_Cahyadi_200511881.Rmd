@@ -205,7 +205,7 @@ head(verticalData_Raw)
   
 ### _**Numerical Summaries of the Data**_
   
-&nbsp;&nbsp;&nbsp Extracting the numerical summaries out of the GPU condition and duration of the task would bear us
+&nbsp;&nbsp;&nbsp; Extracting the numerical summaries out of the GPU condition and duration of the task would bear us
 ```{r, echo = FALSE}
 summary(verticalData_merged_Raw[,c("duration","AvgPowerDrawWatt","AvgGPUTempC","AvgGPUUtilPerc","AvgGPUMemUtilPerc")])
 ```
@@ -274,7 +274,7 @@ knitr::kable(cor(totalRenderData[,c("duration","AvgGPUTempC")]))
 ```{r, echo= FALSE, fig.height=4, fig.width=6}
 ggplot(totalRenderData, aes(x = duration, y = AvgPowerDrawWatt)) + geom_hex() + ggtitle("Power Draw vs Task Duration Graph") + theme(plot.title = element_text(hjust = 0.5))
 ```
-&nbsp&nbsp&nbsp; Looking at the graph above, there is a slight positive correlation trend is detected between the two variables. However, based on this graph alone, there is no clear indication that increased power draw resulted in longer duration or the other way around. Therefore to better understand the correlation between the two variables, a correlation matrix is produced.
+&nbsp;&nbsp;&nbsp; Looking at the graph above, there is a slight positive correlation trend is detected between the two variables. However, based on this graph alone, there is no clear indication that increased power draw resulted in longer duration or the other way around. Therefore to better understand the correlation between the two variables, a correlation matrix is produced.
 ```{r, echo=FALSE}
 
 knitr::kable(cor(totalRenderData[,c(7,10)]))
@@ -322,12 +322,12 @@ knitr::kable(firstTileLeveledData[,c(1,3:6,9)], row.names = FALSE)
 ```{r, echo = FALSE}
 knitr::kable(comparison12and8, row.names = FALSE)
 ```
-&nbsp&nbsp;&nbsp; It is further confirmed by the table of comparison between Zoom Level 8 and Zoom Level 12 that the more zoomed out an image is, the more it demands higher performance out of the hardware.
+&nbsp;&nbsp;&nbsp; It is further confirmed by the table of comparison between Zoom Level 8 and Zoom Level 12 that the more zoomed out an image is, the more it demands higher performance out of the hardware.
 
 
 ### **Identifying GPU Card whose Performance Differ from Others**
   
-&nbsp;&nbsp;&nbsp There are a total of `r length(unique(totalRenderData$gpuSerial))`  types of physical GPU cards used on the current Cloud Architecture, and we would like to gather the information regarding the performance of each type of GPU cards. To aid in identifying which GPU card perform better or worse than the rest, we would plot a graph in which it will show the average render run time for each type of GPU cards.
+&nbsp;&nbsp;&nbsp; There are a total of `r length(unique(totalRenderData$gpuSerial))`  types of physical GPU cards used on the current Cloud Architecture, and we would like to gather the information regarding the performance of each type of GPU cards. To aid in identifying which GPU card perform better or worse than the rest, we would plot a graph in which it will show the average render run time for each type of GPU cards.
 ```{r echo= FALSE, fig.height=4, fig.width=6}
 ggplot(totalRenderData, aes(y = duration, group = gpuSerial, fill = gpuSerial)) + geom_boxplot() + ggtitle("Average Task Duration for Each GPU Serial") + theme(plot.title = element_text(hjust = 0.5)) 
 
