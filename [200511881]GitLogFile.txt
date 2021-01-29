@@ -1,3 +1,9 @@
+commit 4ff90453747d7bdd0e395072b74d77f0a259c718
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 13:59:49 2021 +0000
+
+    Update the report and Update the git log file
+
 commit 7d4753535257f18324bb27af9b6a526d15b570ad
 Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
 Date:   Fri Jan 29 13:46:01 2021 +0000
