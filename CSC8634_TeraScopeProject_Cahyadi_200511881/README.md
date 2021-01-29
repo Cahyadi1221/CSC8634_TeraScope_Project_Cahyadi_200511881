@@ -20,13 +20,14 @@ Welcome to **Performance Evaluation Of Terapixel Rendering in Cloud(Super) Compu
 
 &nbsp;&nbsp;&nbsp; This project utilise **Project Template** as a way to streamlined the analyses process. Therefore the files necessary to run this project are stored within its designated location in which, the load.project() function would be able to call and run these files in an orderly manner. For better navigating below are the important files for this project and where to find them: 
 
+  * **CSC8634_TeraScopeProject_Cahyadi_200511881** folder -> This folder
   * **munge** folder -> Contains the pre-processing files which are used to wrangle the data to be used for analyses. To expedite the reproducibility process, the data munging option is disabled and instead, we would instead used cached data frame to reproduce the analyses.
   * **cache** folder -> Contains the cached data frames that could be used to reproduce the analyses done in this project.
   * **src** folder -> Contains the r script [analysis1.R](src/analysis1.R) that support the analyses.
-  * **reports** folder -> Contains the Written report of this project and the structured abstract. 
+  * **reports** folder -> Contains the Written report of this project [writtenReport_Cahyadi_200511881.pdf](reports/writtenReport_Cahyadi_200511881.pdf)and the structured abstract [Structured_Abstract.pdf](reports/Structured_Abstract.pdf). 
   
 # Steps to Reproduce the Analyses 
 
   1. Open R studio program.
   2. Select open project, and select CSC8634_TeraScopeProject_Cahyadi_200511881.Rproj from the main directory.
-  3. Run the analysis1.R from src folder and writtenReport_Cahyadi_200511881.Rmd from reports folder simultaneosly.
+  3. Run the [analysis1.R](src/analysis1.R) from src folder and [writtenReport_Cahyadi_200511881.Rmd](reports/writtenReport_Cahyadi_200511881.Rmd) from reports folder simultaneosly.
