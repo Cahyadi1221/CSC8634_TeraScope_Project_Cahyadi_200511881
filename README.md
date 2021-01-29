@@ -22,5 +22,5 @@ Welcome to **Performance Evaluation Of Terapixel Rendering in Cloud(Super) Compu
 
   * **munge** folder -> Contains the pre-processing files which are used to wrangle the data to be used for analyses. To expedite the reproducibility process, the data munging option is disabled and instead, we would instead used cached data frame to reproduce the analyses.
   * **cache** folder -> Contains the cached data frames that could be used to reproduce the analyses done in this project.
-  * **src** folder -> Contains the r script [a relative link](src/analysis1.R) that support the analyses.
-  * **reports** folder -> Contains the Written report of this project and the structured abstract.
+  * **src** folder -> Contains the r script [analysis1.R](CSC8634_TeraScopeProject_Cahyadi_200511881/src/analysis1.R) that support the analyses.
+  * **reports** folder -> Contains the Written report of this project [writtenReport_Cahyadi_200511881.pdf](CSC8634_TeraScopeProject_Cahyadi_200511881/reports/writtenReport_Cahyadi_200511881.pdf) and the structured abstract [Structured_Abstract.pdf](CSC8634_TeraScopeProject_Cahyadi_200511881/reports/Structured_Abstract.pdf).
