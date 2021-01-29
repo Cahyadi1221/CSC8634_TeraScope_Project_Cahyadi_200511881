@@ -1,3 +1,15 @@
+commit a039e5021f81889fa8ec933491581fa702174721
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 13:45:20 2021 +0000
+
+    Updating the report (fixing error in creating headings)
+
+commit e8a2361259e163ae03e564523d02bcab656127e8
+Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
+Date:   Fri Jan 29 13:31:39 2021 +0000
+
+    Update the gitlog File
+
 commit 030b74c68f79b83319bc109931fab1349932a4a0
 Author: cahyadi0511881 <c.cahyadi2@newcastle.ac.uk>
 Date:   Fri Jan 29 13:19:27 2021 +0000
