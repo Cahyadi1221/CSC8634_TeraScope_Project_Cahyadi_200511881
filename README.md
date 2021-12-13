@@ -1,4 +1,4 @@
-# CSC8634_TeraScope_Project_Cahyadi_200511881
+# TeraScope Project
 
 Welcome to **Performance Evaluation Of Terapixel Rendering in Cloud(Super) Computing Project**!
 
