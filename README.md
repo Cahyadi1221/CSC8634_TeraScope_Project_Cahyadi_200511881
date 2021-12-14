@@ -1,4 +1,4 @@
-# TeraScope Project
+# Performance Evaluation Of Terapixel Rendering in Cloud(Super) Computing
 
 Welcome to **Performance Evaluation Of Terapixel Rendering in Cloud(Super) Computing Project**!
 
